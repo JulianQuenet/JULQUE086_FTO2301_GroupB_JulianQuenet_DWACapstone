@@ -1,6 +1,11 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
   font-weight: 400;
 
   color-scheme: light dark;
@@ -10,27 +15,70 @@
 
 body {
   margin: 0;
-  min-width: 320px;
-  min-height: 100vh;
-  background-image: url(/Untitled\ design.png);
-  background-size: cover;
+  scroll-behavior: smooth;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+.hero {
+  height: 100vh;
+  width: 100vw;
 }
 
+.show {
+  margin: 5px;
+  height: 100%;
+  width: 100%;
+  font-family: Roboto, sans-serif;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  text-align: left;
+  border-radius: 8px;
+  background-color: rgb(71, 69, 69, 0.2);
+}
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+.show-title {
+  margin: 0 0 0.5rem;
+  font-weight: 400;
+  flex-wrap: wrap;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.show-image {
+  width: 80px;
+  height: 100px;
+  border-radius: 5px;
+  box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2),
+    0px 1px 1px 0px rgba(0, 0, 0, 0.1), 0px 1px 3px 0px rgba(0, 0, 0, 0.1);
+}
+
+.show-info {
+  cursor: pointer;
+  padding: 1rem;
+}
+
+.show-season {
+  color: grey;
+}
+
+.swiper {
+  width: 80%;
+}
+
+.swiper-slide {
+  width: 300px;
+  height: 150px;
+  border-radius: 8px;
+}
+
+.carousel {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding-bottom: 50px; /* Adjust the padding as needed */
 }
