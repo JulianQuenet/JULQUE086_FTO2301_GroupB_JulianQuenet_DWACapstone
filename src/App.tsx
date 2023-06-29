@@ -12,6 +12,7 @@ const App = () => {
     const getList = async () => {
         const res = await fetch(`${URL}`)
         const data = await res.json()
+        data[12].title = "Truth & Justice with Bob Ruff"
         setList(data)
     }
     getList()

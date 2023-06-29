@@ -16,9 +16,9 @@ interface Lists {
 export const Carousel = (props: Lists) => {
   const { item } = props;
   
-  const slides = item.map((preview)=> {
+  const slides = item.map((preview, index)=> {
     return (
-      <SwiperSlide>{preview}</SwiperSlide>
+      <SwiperSlide key={index}>{preview}</SwiperSlide>
   
     )
   })  
