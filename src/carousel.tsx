@@ -1,11 +1,11 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import { EffectCoverflow, Pagination, Navigation} from '../node_modules/swiper'
 
-
 import "swiper/css";
 import "swiper/css/effect-coverflow";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
+
 
 
 interface Lists {
@@ -16,12 +16,15 @@ interface Lists {
 export const Carousel = (props: Lists) => {
   const { item } = props;
   
+  
+  
   const slides = item.map((preview, index)=> {
     return (
       <SwiperSlide key={index}>{preview}</SwiperSlide>
   
     )
   })  
+ 
 
   return (
     <div className="carousel">
@@ -42,7 +45,7 @@ export const Carousel = (props: Lists) => {
             clickable: true,
           }}
           navigation={true}
-        modules={[ EffectCoverflow, Pagination,Navigation]}
+        modules={[ EffectCoverflow, Pagination, Navigation]}
         className="mySwiper"
       >
    {slides}

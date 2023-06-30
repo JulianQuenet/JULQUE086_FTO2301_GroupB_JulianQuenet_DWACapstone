@@ -34,6 +34,7 @@ body {
   text-align: left;
   border-radius: 8px;
   background-color: rgb(71, 69, 69, 0.2);
+  cursor: pointer;
 }
 
 .show-title {
@@ -55,7 +56,6 @@ body {
 }
 
 .show-info {
-  cursor: pointer;
   padding: 1rem;
 }
 
@@ -82,3 +82,16 @@ body {
   justify-content: center;
   padding-bottom: 50px; /* Adjust the padding as needed */
 }
+
+.modal {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 10;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+

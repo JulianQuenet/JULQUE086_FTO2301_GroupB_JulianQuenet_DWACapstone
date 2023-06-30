@@ -1,23 +1,32 @@
 
 interface ShowItem {
-    title: string;
-    image: string;
-    seasons: number;
-    description: string;
-    id:string;
-  }
+  title: string;
+  image: string;
+  seasons: number;
+  description: string;
+  id: string;
+}
+
+interface ShowsProps {
+  item: ShowItem;
+  handleClick: (e: React.MouseEvent<HTMLDivElement>) => void;
+}
+
   
-  export const Shows = (props: { item: ShowItem }) => {
-    const { item } = props;
+  export const Shows = (props: ShowsProps) => {
+    const { item, handleClick } = props;
+
     
     return (
-        <div className = "show" id={item.id}>
+        <>
+        <div className = "show" id={item.id} onClick={handleClick}>
         <img loading="lazy" src={item.image}  className="show-image"/>
         <div className="show-info">
           <p className="show-title">{item.title}</p>
           <div className="show-season">Seasons:{item.seasons}</div>
           </div> 
           </div>
+        </>  
     )
 }
 
