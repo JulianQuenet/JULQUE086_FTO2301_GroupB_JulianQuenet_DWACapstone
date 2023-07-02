@@ -6,13 +6,14 @@ import Modal from "./modal";
 
 const URL: String = "https://podcast-api.netlify.app/shows";
 
+export const ID = {
+  id:''
+}
+
 const App = () => {
   const [list, setList] = React.useState<any[]>([]);
   const [on, setOn] = React.useState<boolean>(false);
-  const [show, setShow] = React.useState<any[]>([]);
-  
-  
-  
+ 
   React.useEffect(() => {
     const getList = async () => {
         const res = await fetch(`${URL}`)
@@ -30,10 +31,8 @@ const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
   }
   const targetId = e.currentTarget.id;
   
-  const response = fetch(`https://podcast-api.netlify.app/id/${targetId}`)
-    .then((res) => res.json())
-    .then((data) => setShow(data));
-    toggleOn()
+  ID.id = targetId;
+  toggleOn();
 };
 
 const toggleOn = () => {
@@ -58,7 +57,7 @@ const lists = list.map((item)=> {
       
     <Carousel item={lists}/>
     </section>
-    { on && <Modal on={on} toggle={toggleOn} card={show}/>}
+    { on && <Modal on={on} toggle={toggleOn}/>}
     </>
   );
 };
