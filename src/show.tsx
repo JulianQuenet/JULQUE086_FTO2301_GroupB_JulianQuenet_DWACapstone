@@ -20,7 +20,7 @@ interface ShowsProps {
     return (
         <>
         <div className = "show" id={item.id} onClick={handleClick}>
-        <img loading="lazy" src={item.image}  className="show-image"/>
+        <img src={item.image}  className="show-image"/>
         <div className="show-info">
           <p className="show-title">{item.title}</p>
           <div className="show-season">Seasons:{item.seasons}</div>

@@ -33,8 +33,12 @@ const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
   const response = fetch(`https://podcast-api.netlify.app/id/${targetId}`)
     .then((res) => res.json())
     .then((data) => setShow(data));
-    setOn(!on);
+    toggleOn()
 };
+
+const toggleOn = () => {
+  setOn(!on);
+}
 
 
 const lists = list.map((item)=> {
@@ -54,7 +58,7 @@ const lists = list.map((item)=> {
       
     <Carousel item={lists}/>
     </section>
-    { on && <Modal card={show}/>}
+    { on && <Modal on={on} toggle={toggleOn} card={show}/>}
     </>
   );
 };

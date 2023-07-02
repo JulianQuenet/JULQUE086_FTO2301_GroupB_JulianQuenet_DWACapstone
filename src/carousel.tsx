@@ -34,17 +34,15 @@ export const Carousel = (props: Lists) => {
         centeredSlides={true}
         slidesPerView={'auto'}
         coverflowEffect={{
-          rotate: 50,
-          stretch: 1,
-          depth: 100,
+          rotate: 5,
+          stretch: -50,
+          depth: 350,
           modifier: 1,
-          slideShadows: true,
+          scale: 0.85,
         }}
         pagination={{
             dynamicBullets: true,
-            clickable: true,
           }}
-          navigation={true}
         modules={[ EffectCoverflow, Pagination, Navigation]}
         className="mySwiper"
       >
