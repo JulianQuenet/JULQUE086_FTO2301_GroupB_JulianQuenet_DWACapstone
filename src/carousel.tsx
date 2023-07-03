@@ -27,7 +27,9 @@ export const Carousel = (props: Lists) => {
  
 
   return (
+    
     <div className="carousel">
+    <h3>All shows:</h3>
     <Swiper
         effect={"coverflow"}
         grabCursor={true}
@@ -49,6 +51,7 @@ export const Carousel = (props: Lists) => {
    {slides}
   </Swiper>
   </div>
+  
   );
 };
 

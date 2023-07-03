@@ -5,11 +5,21 @@ interface ShowItem {
   seasons: number;
   description: string;
   id: string;
+  updated: string;
 }
 
 interface ShowsProps {
   item: ShowItem;
   handleClick: (e: React.MouseEvent<HTMLDivElement>) => void;
+}
+
+
+const formattedDate =(dateString:string|Date) =>{
+  const date = new Date(dateString);
+  const month = date.toLocaleString('default', { month: 'short' });
+  const year = date.getFullYear();
+
+  return `Updated: ${month}(${date.getDate()}) ${year}`;
 }
 
   
@@ -23,7 +33,8 @@ interface ShowsProps {
         <img src={item.image}  className="show-image"/>
         <div className="show-info">
           <p className="show-title">{item.title}</p>
-          <div className="show-season">Seasons:{item.seasons}</div>
+          <div className="show-season">Seasons: {item.seasons}</div>
+          <p className="updated">{formattedDate(item.updated)}</p>
           </div> 
           </div>
         </>  
@@ -31,8 +42,6 @@ interface ShowsProps {
 }
 
 export default Shows
-
-
 
 
 
