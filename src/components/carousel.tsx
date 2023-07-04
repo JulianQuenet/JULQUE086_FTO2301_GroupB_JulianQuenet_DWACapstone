@@ -3,7 +3,7 @@ import {
   EffectCoverflow,
   Pagination,
   Navigation,
-} from "../../node_modules/swiper/swiper";
+} from "../../node_modules/swiper";
 
 import "swiper/css";
 import "swiper/css/effect-coverflow";
@@ -27,6 +27,7 @@ export const Carousel = (props: Lists) => {
       <Swiper
         effect={"coverflow"}
         grabCursor={true}
+        initialSlide={3}
         centeredSlides={true}
         slidesPerView={"auto"}
         coverflowEffect={{
