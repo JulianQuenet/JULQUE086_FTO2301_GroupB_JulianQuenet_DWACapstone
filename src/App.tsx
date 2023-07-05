@@ -4,6 +4,7 @@ import Carousel from "./components/carousel";
 import Modal from "./components/modal";
 import Genres from "./components/genres";
 import FilteredModal from "./components/modal.filtered";
+import Search from "./components/search";
 
 const URL: String = "https://podcast-api.netlify.app/shows";
 
@@ -71,6 +72,7 @@ const App = () => {
           shows={list}
         />
       )}
+      <Search filter={list}/>
       <Genres toggle={handleFiltered} />
     </>
   );

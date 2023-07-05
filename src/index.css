@@ -34,6 +34,7 @@ body {
 .hero {
   height: 100vh;
   width: 100vw;
+  background-color: rgb(0, 0, 0, 0.3);
 }
 
 img{
@@ -69,8 +70,6 @@ img{
   width: 80px;
   height: 100px;
   border-radius: 5px;
-  box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2),
-    0px 1px 1px 0px rgba(0, 0, 0, 0.1), 0px 1px 3px 0px rgba(0, 0, 0, 0.1);
 }
 
 .show-info {
@@ -100,7 +99,12 @@ img{
   width: 100%;
   margin-right: 10px;
   padding: 10px;
-  background-color: rgb(0, 0, 0, 0.3);
+  
+}
+
+
+.carousel h3{
+  margin-left: 10px;
 }
 
 .modal {
@@ -273,3 +277,34 @@ img{
   }
 }
 
+.search{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+}
+
+
+
+.holder{
+  display: flex;
+  justify-content: center;
+  color: rgba(250, 235, 215, 0.336);
+  z-index: -99;
+  margin-top: 10px;
+}
+
+.search-result{
+  background-color: rgba(29, 28, 28, 0.63);
+  width: 95%;
+  margin: 0 auto;
+  padding: 10px;
+  border-radius: 10px;
+  height: 70px;
+}
+
+.filterSlide{
+  height: 50px;
+  width: 200px;
+  background-color: black;
+}

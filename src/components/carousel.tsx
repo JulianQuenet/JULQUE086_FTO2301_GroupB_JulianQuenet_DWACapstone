@@ -27,7 +27,6 @@ export const Carousel = (props: Lists) => {
       <Swiper
         effect={"coverflow"}
         grabCursor={true}
-        initialSlide={3}
         centeredSlides={true}
         slidesPerView={"auto"}
         coverflowEffect={{
@@ -37,9 +36,7 @@ export const Carousel = (props: Lists) => {
           modifier: 1,
           scale: 0.85,
         }}
-        pagination={{
-          dynamicBullets: true,
-        }}
+        pagination={{ dynamicBullets: true, clickable: true }}
         modules={[EffectCoverflow, Pagination, Navigation]}
         className="mySwiper"
       >

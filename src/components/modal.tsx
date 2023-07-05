@@ -19,7 +19,7 @@ interface cardProps {
       const data = await res.json();
       setSeasons(data.seasons);
       setEpisodes(data.seasons[0].episodes);
-      setImage(seasons[index].image);
+      setImage(data.seasons[0].image);
     };
     getCard();
   }, []);
@@ -46,7 +46,7 @@ interface cardProps {
 
   const episodeList = episodes.map((item, index) => {
     return (
-      <div className="episode">
+      <div key={index} className="episode">
         <div className="episode-title">{item.title}</div>
         <div className="episode-number">Ep:{item.episode}</div>
       </div>
