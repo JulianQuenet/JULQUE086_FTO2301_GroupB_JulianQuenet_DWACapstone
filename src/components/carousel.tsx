@@ -23,12 +23,12 @@ export const Carousel = (props: Lists) => {
 
   return (
     <div className="carousel">
-      <h3>All shows:</h3>
       <Swiper
         effect={"coverflow"}
         grabCursor={true}
         centeredSlides={true}
         slidesPerView={"auto"}
+        initialSlide={4}
         coverflowEffect={{
           rotate: 5,
           stretch: -50,
@@ -38,7 +38,7 @@ export const Carousel = (props: Lists) => {
         }}
         pagination={{ dynamicBullets: true, clickable: true }}
         modules={[EffectCoverflow, Pagination, Navigation]}
-        className="mySwiper"
+        className="carouselSwiper"
       >
         {slides}
       </Swiper>

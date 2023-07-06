@@ -30,6 +30,7 @@ interface cardProps {
     }
   }, [index, seasons]);
 
+  
   const options = seasons.map((item, index) => {
     return (
       <option key={item.title} value={index}>

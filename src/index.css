@@ -50,7 +50,7 @@ img {
   align-items: center;
   text-align: left;
   border-radius: 8px;
-  background-color: rgb(71, 69, 69, 0.2);
+  background-color: rgba(59, 58, 58, 0.15);
   cursor: pointer;
 }
 
@@ -90,14 +90,19 @@ img {
 }
 
 .carousel {
-  width: 95%;
-  padding: 10px;
-  margin: 10px auto;
+  width: 100%;
+  background: rgb(0,0,0);
+  background: linear-gradient(90deg, rgba(0,0,0,1) 0%, rgba(18,27,41,1) 100%);
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  box-shadow:  -8px 16px 25px #0e0d0d,
+             8px -16px 25px #0f0f0f;
 }
 
 .carousel h3 {
   margin-left: 10px;
 }
+
 
 .modal {
   position: fixed;
@@ -265,7 +270,7 @@ img {
   align-items: center;
   margin: 10px auto;
   justify-content: space-between;
-  width: 95%;
+  width: 75vw;
 }
 
 .holder {
@@ -273,12 +278,12 @@ img {
   justify-content: center;
   color: rgba(250, 235, 215, 0.336);
   z-index: -99;
-  margin-top: 10px;
+  margin-top: 20px;
 }
 
 .search-result {
   background-color: rgba(29, 28, 28, 0.63);
-  width: 95%;
+  width: 75vw;
   margin: 0 auto;
   padding: 10px;
   border-radius: 10px;
@@ -309,4 +314,9 @@ img {
 .genre-section {
   width: 95%;
   margin: 10px auto;
+}
+
+.searchSwiper {
+  display: flex;
+  justify-content: center;
 }

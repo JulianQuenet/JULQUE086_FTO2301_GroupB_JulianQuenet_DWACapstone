@@ -35,7 +35,6 @@ const Genres = (props: genreProps) => {
         backgroundRepeat: "no-repeat",
       };
     });
-    console.log(styles[index]);
     return styles[index];
   };
 
