@@ -60,7 +60,6 @@ const App = () => {
   return (
     <>
       <section className="hero">
-        <Carousel item={lists} />
       </section>
       {on && <Modal on={on} toggle={toggleOn} path={id} />}
       {filtered && (
@@ -72,7 +71,8 @@ const App = () => {
           shows={list}
         />
       )}
-      <Search filter={list}/>
+      <Carousel item={lists} />
+      <Search filter={list} handleClick={handleClick}/>
       <Genres toggle={handleFiltered} />
     </>
   );
