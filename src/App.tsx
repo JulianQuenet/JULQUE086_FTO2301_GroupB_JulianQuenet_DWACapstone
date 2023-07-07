@@ -13,6 +13,7 @@ const App = () => {
   const [on, setOn] = React.useState<boolean>(false);
   const [id, setId] = React.useState<string>("");
   const [filtered, setFiltered] = React.useState<boolean>(false);
+  const [genre, setGenre] = React.useState<string>("");
 
   React.useEffect(() => {
     const getList = async () => {
@@ -29,7 +30,7 @@ const App = () => {
       throw new Error(`${e.target} returned null`);
     }
     const targetId = e.currentTarget.id;
-
+    
     setId(targetId);
     toggleOn();
   };
@@ -38,15 +39,14 @@ const App = () => {
     if (!e.target) {
       throw new Error(`${e.target} returned null`);
     }
-
+     
     const genre = e.currentTarget.id;
-    setId(genre);
+    setGenre(genre);
     toggleFiltered();
   };
 
   const toggleOn = () => {
     setOn(!on);
-    setFiltered(false);
   };
 
   const toggleFiltered = () => {
@@ -65,7 +65,7 @@ const App = () => {
       {on && <Modal on={on} toggle={toggleOn} path={id} />}
       {filtered && (
         <FilteredModal
-          name={id}
+          name={genre}
           open={filtered}
           toggle={toggleFiltered}
           handleClick={handleClick}

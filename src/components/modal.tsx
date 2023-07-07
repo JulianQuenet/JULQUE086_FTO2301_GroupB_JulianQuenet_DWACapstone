@@ -1,4 +1,5 @@
 import React from "react";
+import Stream from "./stream";
 
 interface cardProps {
   toggle: () => void;
@@ -11,6 +12,8 @@ interface cardProps {
   const [episodes, setEpisodes] = React.useState<any[]>([]);
   const [image, setImage] = React.useState<string>("");
   const [index, setIndex] = React.useState<number>(0);
+  const [streaming, setStreaming] = React.useState<boolean>(false);
+  const [watchEpisode, setWatchEpisode] = React.useState<any[]>([]);
 
   React.useEffect(() => {
     const URL: String = `https://podcast-api.netlify.app/id/${path}`;
@@ -33,7 +36,7 @@ interface cardProps {
   
   const options = seasons.map((item, index) => {
     return (
-      <option key={item.title} value={index}>
+      <option key={index} value={index}>
         Season {index + 1}
       </option>
     );
@@ -45,9 +48,21 @@ interface cardProps {
     setIndex(index);
   };
 
+  const toggleStream = () => {
+    setStreaming(!streaming);
+  }
+
+
+  const startStream = (e: React.MouseEvent<HTMLDivElement>) => {
+      const targetId: number = parseInt(e.currentTarget.id)
+      const episode = episodes[targetId];
+      setWatchEpisode([episode]);
+      toggleStream();
+  }
+
   const episodeList = episodes.map((item, index) => {
     return (
-      <div key={index} className="episode">
+      <div key={index} className="episode" onClick={startStream} id={index.toString()}>
         <div className="episode-title">{item.title}</div>
         <div className="episode-number">Ep:{item.episode}</div>
       </div>
@@ -57,7 +72,7 @@ interface cardProps {
   return (
     <>
       <div className="backdrop"></div>
-      <dialog open={on} className="modal">
+      <dialog open={on} className="modal primary">
         <section className="modal-container">
           <div className="inputs">
             <button onClick={toggle}>return</button>
@@ -70,6 +85,7 @@ interface cardProps {
         </section>
         <div className="list">{episodeList}</div>
       </dialog>
+      {streaming && <Stream open={streaming} closeStream={toggleStream} playing={watchEpisode}/>}
     </>
   );
 };
