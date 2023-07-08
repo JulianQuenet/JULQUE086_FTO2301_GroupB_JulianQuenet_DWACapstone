@@ -26,7 +26,7 @@ body {
   margin: 0;
   min-width: 100%;
   min-height: 100vh;
-  scroll-behavior: smooth;
+  overflow-y: auto;
   overflow-x: hidden;
 }
 
@@ -152,10 +152,19 @@ img {
 }
 
 .card-display {
+  margin: 0 auto;
+  max-width: 450px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  padding: 20px 10px;
+  border-radius: 10px;
+  backdrop-filter: blur(4.5px);
+  background-color: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.089);
+  text-align: center;
+  font-size: 0.9rem;
 }
 
 .updated {
@@ -186,14 +195,30 @@ img {
   }
 }
 
-.list {
-  height: 70%;
+.list{
+  height: 37.5%;
   overflow-y: auto;
   overflow-x: hidden;
+  border-radius: 10px;
 }
 
+::-webkit-scrollbar {
+  width: 4.5px; /* Adjust the width to make the scrollbar thinner */
+}
+
+::-webkit-scrollbar-track {
+  background-color: #3b3737; /* Set the background color of the scrollbar track */
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #88888883; /* Set the color of the scrollbar thumb */
+  border-radius: 10px;
+}
+
+
 .filtered {
-  height: 90%;
+  height: 82.5%;
 }
 
 .episode-title {

@@ -50,9 +50,7 @@ const FilteredModal = (props: cardProps) => {
         <div className="inputs">
           <button onClick={toggle}>return</button>
         </div>
-        <div className="card-display">
-          <div className="card-info">{name}</div>
-        </div>
+          <div className="card-display">{name}</div>
         <div className="list filtered">{list}</div>
       </dialog>
     </>

@@ -1,19 +1,19 @@
 import React from "react";
-import Stream from "./stream";
+import AudioPlayer from "react-h5-audio-player";
+import "react-h5-audio-player/lib/styles.css";
 
 interface cardProps {
   toggle: () => void;
   on: boolean;
   path: string;
 }
- const Modal = (props: cardProps) => {
+const Modal = (props: cardProps) => {
   const { toggle, on, path } = props;
   const [seasons, setSeasons] = React.useState<any[]>([]);
   const [episodes, setEpisodes] = React.useState<any[]>([]);
   const [image, setImage] = React.useState<string>("");
   const [index, setIndex] = React.useState<number>(0);
-  const [streaming, setStreaming] = React.useState<boolean>(false);
-  const [watchEpisode, setWatchEpisode] = React.useState<any[]>([]);
+  const [episodeIndex, setEpisodeIndex] = React.useState<number>(0);
 
   React.useEffect(() => {
     const URL: String = `https://podcast-api.netlify.app/id/${path}`;
@@ -23,6 +23,7 @@ interface cardProps {
       setSeasons(data.seasons);
       setEpisodes(data.seasons[0].episodes);
       setImage(data.seasons[0].image);
+      setEpisodeIndex(0);
     };
     getCard();
   }, []);
@@ -33,7 +34,6 @@ interface cardProps {
     }
   }, [index, seasons]);
 
-  
   const options = seasons.map((item, index) => {
     return (
       <option key={index} value={index}>
@@ -46,28 +46,75 @@ interface cardProps {
     const index: number = Number(e.target.value);
     setEpisodes(seasons[index].episodes);
     setIndex(index);
+    setEpisodeIndex(0);
   };
 
-  const toggleStream = () => {
-    setStreaming(!streaming);
-  }
+  const getBackground = (props: string) => {
+    return {
+      margin: "0 auto",
+      padding: "10px",
+      borderRadius: "10px",
+      width: "90%",
+      backgroundImage: `url(${props})`,
+      backgroundSize: "cover",
+      repeat: "no-repeat",
+    };
+  };
 
+  const chooseEpisode = (e: React.MouseEvent<HTMLDivElement>) => {
+    const targetId: number = parseInt(e.currentTarget.id);
+    setEpisodeIndex(targetId);
+  };
 
-  const startStream = (e: React.MouseEvent<HTMLDivElement>) => {
-      const targetId: number = parseInt(e.currentTarget.id)
-      const episode = episodes[targetId];
-      setWatchEpisode([episode]);
-      toggleStream();
-  }
+  const player = episodes.map((item, index) => {
+    const nextEpisode = () => {
+      if (episodeIndex === episodes.length - 1) {
+        setEpisodeIndex(0);
+        return;
+      }
+      setEpisodeIndex((prev) => prev + 1);
+    };
+
+    const prevEpisode = () => {
+      if (episodeIndex === 0) {
+        setEpisodeIndex(episodes.length - 1);
+        return;
+      }
+      setEpisodeIndex((prev) => prev - 1);
+    };
+
+    return (
+      <div key={index} className="card-display">
+        <div className="card-episode">Episode {index + 1}</div>
+          <img src={image} width={100} className="card-image" />
+            <div className="card-title">{item.title}</div>
+        <AudioPlayer
+          onClickNext={nextEpisode}
+          onClickPrevious={prevEpisode}
+          autoPlayAfterSrcChange={false}
+          src={item.file}
+          showSkipControls={true}
+          showJumpControls={false}
+        />
+      </div>
+    );
+  })[episodeIndex];
 
   const episodeList = episodes.map((item, index) => {
     return (
-      <div key={index} className="episode" onClick={startStream} id={index.toString()}>
+      <div
+        key={index}
+        className="episode"
+        onClick={chooseEpisode}
+        id={index.toString()}
+      >
         <div className="episode-title">{item.title}</div>
         <div className="episode-number">Ep:{item.episode}</div>
       </div>
     );
   });
+
+
 
   return (
     <>
@@ -78,14 +125,11 @@ interface cardProps {
             <button onClick={toggle}>return</button>
             <select onChange={getEpisode}>{options}</select>
           </div>
-          <div className="card-display">
-            <img className="card-image" src={image} width="100" />
-            <div className="card-info">{episodes.length}</div>
-          </div>
+          <div style={getBackground(image)}>{player}</div>
         </section>
+        <p style={{margin: "0 15px"}}>Episodes: {episodes.length}</p>
         <div className="list">{episodeList}</div>
       </dialog>
-      {streaming && <Stream open={streaming} closeStream={toggleStream} playing={watchEpisode}/>}
     </>
   );
 };
