@@ -1,6 +1,17 @@
 import React from "react";
 import AudioPlayer from "react-h5-audio-player";
 import "react-h5-audio-player/lib/styles.css";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { styled } from "@mui/material/styles";
+import Tooltip, { TooltipProps, tooltipClasses } from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
+
+
+const FAVORITES: any = [];
+
+
 
 interface cardProps {
   toggle: () => void;
@@ -14,6 +25,8 @@ const Modal = (props: cardProps) => {
   const [image, setImage] = React.useState<string>("");
   const [index, setIndex] = React.useState<number>(0);
   const [episodeIndex, setEpisodeIndex] = React.useState<number>(0);
+  const [open, setOpen] = React.useState<boolean>(false);
+  const [favorites, setFavorites] = React.useState<any[]>(FAVORITES);
 
   React.useEffect(() => {
     const URL: String = `https://podcast-api.netlify.app/id/${path}`;
@@ -28,11 +41,17 @@ const Modal = (props: cardProps) => {
     getCard();
   }, []);
 
+
   React.useEffect(() => {
     if (seasons.length >= 1) {
       setImage(seasons[index].image);
     }
   }, [index, seasons]);
+
+  React.useEffect(() => {
+    setOpen(false);
+  }, [episodeIndex]);
+
 
   const options = seasons.map((item, index) => {
     return (
@@ -66,28 +85,86 @@ const Modal = (props: cardProps) => {
     setEpisodeIndex(targetId);
   };
 
-  const player = episodes.map((item, index) => {
-    const nextEpisode = () => {
-      if (episodeIndex === episodes.length - 1) {
-        setEpisodeIndex(0);
-        return;
-      }
-      setEpisodeIndex((prev) => prev + 1);
-    };
+  const nextEpisode = () => {
+    if (episodeIndex === episodes.length - 1) {
+      setEpisodeIndex(0);
+      return;
+    }
+    setEpisodeIndex((prev) => prev + 1);
+  };
 
-    const prevEpisode = () => {
-      if (episodeIndex === 0) {
-        setEpisodeIndex(episodes.length - 1);
-        return;
+  const prevEpisode = () => {
+    if (episodeIndex === 0) {
+      setEpisodeIndex(episodes.length - 1);
+      return;
+    }
+    setEpisodeIndex((prev) => prev - 1);
+  };
+
+  const toggleTooltip = () => {
+    setOpen(!open);
+    return {
+      transform: "rotate(180deg)",
+    }
+  };
+
+  const DescriptionTooltip = styled(
+    ({ className, ...props }: TooltipProps) => (
+      <Tooltip {...props} classes={{ popper: className }} />
+    )
+  )(({ theme }) => ({
+    [`& .${tooltipClasses.tooltip}`]: {
+      backgroundColor: "#f5f5f9",
+      color: "rgba(0, 0, 0, 0.87)",
+      maxWidth: 200,
+      fontSize: theme.typography.pxToRem(12),
+      border: "1px solid #dadde9",
+      textAlign: "center",
+    },
+  }));
+
+  const addToFavorites = () => {
+    const selectedEpisode = episodes[episodeIndex];
+
+    if (favorites.includes(selectedEpisode)) {
+      setFavorites(favorites.filter(item => item !== selectedEpisode));
+      const index = FAVORITES.indexOf(selectedEpisode);
+      if (index !== -1) {
+        FAVORITES.splice(index, 1);
       }
-      setEpisodeIndex((prev) => prev - 1);
-    };
+    } else {
+      setFavorites([...favorites, selectedEpisode]);
+      FAVORITES.push(selectedEpisode);
+    }
+  }
+
+
+  const player = episodes.map((item, index) => {
+    
 
     return (
       <div key={index} className="card-display">
+        <div className="icons">
+          <DescriptionTooltip
+            open={open}
+            onClick={toggleTooltip}
+            onMouseEnter={()=>setOpen(true)}
+            onMouseLeave={()=>setOpen(false)}
+            title={
+              <React.Fragment>
+                <Typography color="green">Description</Typography>
+                {item.description}
+              </React.Fragment>
+            }
+          >
+            <ExpandMoreIcon style={{cursor:"pointer"}}/>
+          </DescriptionTooltip>
+          {favorites.includes(episodes[episodeIndex])? <FavoriteIcon onClick={addToFavorites} style={{cursor: "pointer"}}/> :
+          <FavoriteBorderIcon onClick={addToFavorites}  style={{cursor: "pointer"}}/>}
+        </div>
         <div className="card-episode">Episode {index + 1}</div>
-          <img src={image} width={100} className="card-image" />
-            <div className="card-title">{item.title}</div>
+        <img style={{ margin: "0 auto" }} src={image} width={100} />
+        <div className="card-title">{item.title}</div>
         <AudioPlayer
           onClickNext={nextEpisode}
           onClickPrevious={prevEpisode}
@@ -99,6 +176,8 @@ const Modal = (props: cardProps) => {
       </div>
     );
   })[episodeIndex];
+
+ console.log(FAVORITES)
 
   const episodeList = episodes.map((item, index) => {
     return (
@@ -114,8 +193,6 @@ const Modal = (props: cardProps) => {
     );
   });
 
-
-
   return (
     <>
       <div className="backdrop"></div>
@@ -127,7 +204,7 @@ const Modal = (props: cardProps) => {
           </div>
           <div style={getBackground(image)}>{player}</div>
         </section>
-        <p style={{margin: "0 15px"}}>Episodes: {episodes.length}</p>
+        <p style={{ margin: "0 15px" }}>Episodes: {episodes.length}</p>
         <div className="list">{episodeList}</div>
       </dialog>
     </>
