@@ -1,9 +1,5 @@
 import React from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation } from "../../node_modules/swiper";
-
-import "swiper/css";
-import "swiper/css/navigation";
+import { formattedDate } from "./show";
 
 interface SearchProps {
   filter: any[];
@@ -21,14 +17,15 @@ const SORTING__OPTIONS: string[] = [
 const Search = (props: SearchProps) => {
   const { filter, handleClick } = props;
   const [searchResult, setSearchResult] = React.useState<any[]>([]);
-  const [filterResult, setFilterResult] = React.useState<any[]>([]);
-  const [filtering, setFiltering] = React.useState<boolean>(false);
-  const [none, setNone] = React.useState<boolean>(false);
+  const [defaultResult, setDefaultResult] = React.useState<any[]>([]);
+
+  React.useEffect(() => {
+    setSearchResult(filter);
+    setDefaultResult(searchResult);
+  }, [filter]);
 
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setNone(false);
-    setFiltering(false);
     const formData = new FormData(e.currentTarget);
     const data: { [key: string]: string } = {};
     formData.forEach((value, key) => {
@@ -40,19 +37,12 @@ const Search = (props: SearchProps) => {
       return item.title.toLowerCase().includes(data.searchOutput);
     });
     setSearchResult(result);
-    if (result.length === 0) {
-      setNone(true);
-    }
+    setDefaultResult(result);
   };
-
-  const message = none
-    ? "No results found"
-    : "Your search results will appear here";
 
   const sortBy = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
-    setFiltering(true);
-    let sortedResult;
+    let sortedResult: any[] = [];
 
     switch (value) {
       case "A-Z":
@@ -65,21 +55,23 @@ const Search = (props: SearchProps) => {
           b.title.localeCompare(a.title, undefined, { sensitivity: "base" })
         );
         break;
-        case "Newest":
-          sortedResult = [...searchResult].sort((a, b) =>
-          new Date(b.updated).getTime() - new Date(a.updated).getTime()
+      case "Newest":
+        sortedResult = [...searchResult].sort(
+          (a, b) =>
+            new Date(b.updated).getTime() - new Date(a.updated).getTime()
         );
         break;
-        case "Oldest":
-          sortedResult = [...searchResult].sort((a, b) =>
-          new Date(a.updated).getTime() - new Date(b.updated).getTime()
+      case "Oldest":
+        sortedResult = [...searchResult].sort(
+          (a, b) =>
+            new Date(a.updated).getTime() - new Date(b.updated).getTime()
         );
         break;
       default:
-        sortedResult = searchResult;
+        sortedResult = defaultResult;
     }
 
-    setFilterResult(sortedResult);
+    setSearchResult(sortedResult);
   };
 
   const options = SORTING__OPTIONS.map((item, index) => {
@@ -90,7 +82,39 @@ const Search = (props: SearchProps) => {
     );
   });
 
-  const toMap = filtering ? filterResult : searchResult;
+  const podcastList = searchResult.map((item, index) => {
+    return (
+      <div
+        key={index}
+        className="search-result-item"
+        id={item.id}
+        onClick={handleClick}
+      >
+        <div className="item-content">
+          <div className="item-preface">
+            <img
+              src={item.image}
+              alt={item.title}
+              style={{ display: "block", margin: "0 auto", width: "100%" }}
+            />
+            <div className="search-info">
+              {item.title}
+              <div>
+                {" "}
+                <div className="show-season">Seasons: {item.seasons}</div>
+                <p className="updated">{formattedDate(item.updated)}</p>
+              </div>
+            </div>
+          </div>
+          <div className="item-backface">
+            <p className="item-description" style={{ fontSize: "0.75rem" }}>
+              {item.description}
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  });
 
   return (
     <>
@@ -109,30 +133,7 @@ const Search = (props: SearchProps) => {
         </div>
       </div>
       <div className="search-result">
-        {searchResult.length === 0 && <div className="holder">{message}</div>}
-        <Swiper
-          slidesPerView={"auto"}
-          initialSlide={searchResult.length < 4 ? 1 : 0}
-          spaceBetween={10}
-          navigation={true}
-          modules={[Navigation]}
-          centeredSlides={searchResult.length < 4 ? true : false}
-        >
-          {toMap.map((item) => {
-            return (
-              <SwiperSlide key={item.id} className="filterSlide">
-                <div onClick={handleClick} id={item.id} className="result">
-                  <img
-                    src={item.image}
-                    alt={item.title}
-                    className="search-image"
-                  />
-                  <p className="search-title">{item.title}</p>
-                </div>
-              </SwiperSlide>
-            );
-          })}
-        </Swiper>
+        {podcastList}
       </div>
     </>
   );

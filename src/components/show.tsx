@@ -19,7 +19,7 @@ export const formattedDate =(dateString:string|Date) =>{
   const month = date.toLocaleString('default', { month: 'short' });
   const year = date.getFullYear();
 
-  return `Updated: ${month}(${date.getDate()}) ${year}`;
+  return `Updated: ${year} ${month}(${date.getDate()})`;
 }
 
   

@@ -11,13 +11,14 @@ import "swiper/css/pagination";
 import "swiper/css/navigation"; 
 
 interface Lists {
-  item: JSX.Element[];
+  items: JSX.Element[];
 }
 
 export const Carousel = (props: Lists) => {
-  const { item } = props;
+  const { items } = props;
 
-  const slides = item.map((preview, index) => {
+  const slicedItem = items.slice(0, 11);
+  const slides = slicedItem.map((preview, index) => {
     return <SwiperSlide key={index}>{preview}</SwiperSlide>;
   });
 

@@ -1,81 +1,35 @@
+import Homepage from "./homepage";
+import Landing from "./components/landing";
 import React from "react";
-import Shows from "./components/show";
-import Carousel from "./components/carousel";
-import Modal from "./components/modal";
-import Genres from "./components/genres";
-import FilteredModal from "./components/modal.filtered";
-import Search from "./components/search";
+import { Route, Routes, BrowserRouter } from "react-router-dom";
+import "./index.css";
+import "./form.css";
 
-const URL: String = "https://podcast-api.netlify.app/shows";
 
 const App = () => {
-  const [list, setList] = React.useState<any[]>([]);
-  const [on, setOn] = React.useState<boolean>(false);
-  const [id, setId] = React.useState<string>("");
-  const [filtered, setFiltered] = React.useState<boolean>(false);
-  const [genre, setGenre] = React.useState<string>("");
+   const [user, setUser] = React.useState<any>(null);
 
-  React.useEffect(() => {
-    const getList = async () => {
-      const res = await fetch(`${URL}`);
-      const data = await res.json();
-      data[12].title = "Truth & Justice with Bob Ruff";
-      setList(data);
-    };
-    getList();
-  }, []);
+   if(user){
+    sessionStorage.setItem('user', JSON.stringify(user));
+   }
 
-  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!e.target) {
-      throw new Error(`${e.target} returned null`);
+   React.useEffect(() => {
+    const user = sessionStorage.getItem('user');
+    if(user){
+      setUser(JSON.parse(user));
     }
-    const targetId = e.currentTarget.id;
-    
-    setId(targetId);
-    toggleOn();
-  };
-
-  const handleFiltered = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!e.target) {
-      throw new Error(`${e.target} returned null`);
-    }
-     
-    const genre = e.currentTarget.id;
-    setGenre(genre);
-    toggleFiltered();
-  };
-
-  const toggleOn = () => {
-    setOn(!on);
-  };
-
-  const toggleFiltered = () => {
-    setFiltered(!filtered);
-  };
-
-  const lists = list.map((item) => {
-    return <Shows key={item.id} item={item} handleClick={handleClick} />;
-  });
+   }, []);
 
   return (
-    <>
-      <section className="hero">
-      <Carousel item={lists} />
-      </section>
-      {on && <Modal on={on} toggle={toggleOn} path={id} />}
-      {filtered && (
-        <FilteredModal
-          name={genre}
-          open={filtered}
-          toggle={toggleFiltered}
-          handleClick={handleClick}
-          shows={list}
-        />
-      )}
-      <Search filter={list} handleClick={handleClick}/>
-      <Genres toggle={handleFiltered} />
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Landing setUser={setUser}/>} />
+        {user && <Route path="/homepage" element={<Homepage />} />}
+      </Routes>
+    </BrowserRouter>
   );
 };
+
+
 
 export default App;
