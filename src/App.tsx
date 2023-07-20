@@ -24,7 +24,7 @@ const App = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Landing setUser={setUser}/>} />
-        {user && <Route path="/homepage" element={<Homepage />} />}
+        {user && <Route path="/homepage" element={<Homepage user={user}/>} />}
       </Routes>
     </BrowserRouter>
   );

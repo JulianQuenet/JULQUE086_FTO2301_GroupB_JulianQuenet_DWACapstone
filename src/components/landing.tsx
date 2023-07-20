@@ -2,11 +2,9 @@ import React from "react";
 import supabase from "../../supabaseClient";
 import { useNavigate } from "react-router-dom";
 
-
 interface LandingProps {
-  setUser: any 
+  setUser: any;
 }
-
 
 const Landing = (props: LandingProps) => {
   const { setUser } = props;
@@ -75,11 +73,9 @@ const Landing = (props: LandingProps) => {
 
         if (error) throw error;
         if (!data) throw new Error("No data returned");
-        setUser(data)
+        setUser(data);
         navigate("/homepage");
-      } 
-      
-      catch (error) {
+      } catch (error) {
         alert(error);
       }
     };

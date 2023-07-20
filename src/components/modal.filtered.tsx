@@ -1,5 +1,7 @@
 import React from "react";
 import { formattedDate } from "./show";
+import CloseIcon from "@mui/icons-material/Close";
+import { IconButton } from "@mui/material";
 
 interface cardProps {
   toggle: () => void;
@@ -38,7 +40,7 @@ const FilteredModal = (props: cardProps) => {
             <div className="list-season">Seasons: {item.seasons}</div>
           </div>
         </div>
-        <div className="updated">{formattedDate(item.updated)}</div>
+        <div className="updated">Updated: {formattedDate(item.updated)}</div>
       </div>
     );
   });
@@ -48,7 +50,7 @@ const FilteredModal = (props: cardProps) => {
       <div className="backdrop"></div>
       <dialog open={open} className="modal">
         <div className="inputs">
-          <button onClick={toggle}>return</button>
+          <IconButton onClick={toggle} color="info"><CloseIcon /></IconButton>
         </div>
           <div className="card-display">{name}</div>
         <div className="list filtered">{list}</div>

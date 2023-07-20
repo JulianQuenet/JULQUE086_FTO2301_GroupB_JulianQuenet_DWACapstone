@@ -8,7 +8,7 @@ import {
 import "swiper/css";
 import "swiper/css/pagination";
 
-const GENRES: string[] = [
+export const GENRES: string[] = [
   "Entertainment",
   "Comedy",
   "True Crime and Investigative Journalism",
@@ -54,7 +54,6 @@ const Genres = (props: genreProps) => {
 
   return (
     <div className="genre-section">
-      <p className="genres-header">Genres</p>
       <Swiper slidesPerView={"auto"} spaceBetween={10}
       navigation={true}
       modules={[Pagination, Navigation]}

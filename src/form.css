@@ -238,4 +238,34 @@
     -webkit-transform: none;
     transform: none;
   }
+
+  select{
+  border: 1px solid rgba(255, 255, 255, 0.089);
+  padding: 3px;
+  background-color: rgba(66, 66, 66, 0.096);
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  margin: 0 5px;
+  outline: none;
+  margin-bottom: 2px;
+  }
+
+  option{
+    background-color: rgba(66, 66, 66);
+  }
+
+  select:hover{
+    background-color: rgba(66, 66, 66, 0.596);
+  }
+
+  label{
+    margin: 0 5px;
+  }
+
+.search button{
+ outline: none;
+ margin: 0 5px;
+ 
+}
   

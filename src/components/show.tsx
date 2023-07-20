@@ -19,7 +19,7 @@ export const formattedDate =(dateString:string|Date) =>{
   const month = date.toLocaleString('default', { month: 'short' });
   const year = date.getFullYear();
 
-  return `Updated: ${year} ${month}(${date.getDate()})`;
+  return `${year} ${month}(${date.getDate()})`;
 }
 
   
@@ -34,7 +34,7 @@ export const formattedDate =(dateString:string|Date) =>{
         <div className="show-info">
           <p className="show-title">{item.title}</p>
           <div className="show-season">Seasons: {item.seasons}</div>
-          <p className="updated">{formattedDate(item.updated)}</p>
+          <p className="updated">Updated: {formattedDate(item.updated)}</p>
           </div> 
           </div>
         </>  

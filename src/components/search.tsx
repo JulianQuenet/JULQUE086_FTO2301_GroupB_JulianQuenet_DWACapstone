@@ -1,12 +1,18 @@
 import React from "react";
 import { formattedDate } from "./show";
+import { GENRES } from "./genres";
+import { Button, IconButton } from "@mui/material";
+import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
+import SearchIcon from "@mui/icons-material/Search";
+import TextField from '@mui/material/TextField';
 
 interface SearchProps {
   filter: any[];
   handleClick: (e: React.MouseEvent<HTMLDivElement>) => void;
+  openGenre: (e: React.MouseEvent<HTMLDivElement>) => void;
 }
 
-const SORTING__OPTIONS: string[] = [
+export const SORTING__OPTIONS: string[] = [
   "Default",
   "A-Z",
   "Z-A",
@@ -15,7 +21,7 @@ const SORTING__OPTIONS: string[] = [
 ];
 
 const Search = (props: SearchProps) => {
-  const { filter, handleClick } = props;
+  const { filter, handleClick, openGenre } = props;
   const [searchResult, setSearchResult] = React.useState<any[]>([]);
   const [defaultResult, setDefaultResult] = React.useState<any[]>([]);
 
@@ -29,10 +35,12 @@ const Search = (props: SearchProps) => {
     const formData = new FormData(e.currentTarget);
     const data: { [key: string]: string } = {};
     formData.forEach((value, key) => {
-      if (value === "" || value === null) return;
       data[key] = String(value).toLowerCase();
     });
-
+    if (data.searchOutput === "") {
+      setSearchResult(defaultResult);
+      return;
+    }
     const result = filter.filter((item) => {
       return item.title.toLowerCase().includes(data.searchOutput);
     });
@@ -82,16 +90,20 @@ const Search = (props: SearchProps) => {
     );
   });
 
+  const genreStyle: React.CSSProperties = {
+    border: "solid 1px darkgrey",
+    borderRadius: "10px",
+    fontSize: "0.7rem",
+    padding: "2px",
+    cursor: "pointer",
+    fontFamily: "Arial, Helvetica, sans-serif",
+  };
+
   const podcastList = searchResult.map((item, index) => {
     return (
-      <div
-        key={index}
-        className="search-result-item"
-        id={item.id}
-        onClick={handleClick}
-      >
+      <div key={index} className="search-result-item">
         <div className="item-content">
-          <div className="item-preface">
+          <div className="item-preface" style={{ paddingBottom: "10px" }}>
             <img
               src={item.image}
               alt={item.title}
@@ -100,13 +112,32 @@ const Search = (props: SearchProps) => {
             <div className="search-info">
               {item.title}
               <div>
-                {" "}
                 <div className="show-season">Seasons: {item.seasons}</div>
-                <p className="updated">{formattedDate(item.updated)}</p>
+                <p className="updated">
+                  Updated: {formattedDate(item.updated)}
+                </p>
               </div>
             </div>
           </div>
-          <div className="item-backface">
+          <div className="item-backface" style={{ textAlign: "center" }}>
+            <div onClick={handleClick} id={item.id}>
+              <Button
+                size="small"
+                variant="outlined"
+                endIcon={<PlayCircleOutlineIcon />}
+              >
+                Play
+              </Button>
+            </div>
+            <div
+              onClick={openGenre}
+              className="user-button"
+              id={GENRES[item.genres[0] - 1]}
+              style={genreStyle}
+            >
+              Genre:{GENRES[item.genres[0] - 1]}
+            </div>
+            <div style={{ margin: "5px", color: "green" }}>DESCRIPTION</div>
             <p className="item-description" style={{ fontSize: "0.75rem" }}>
               {item.description}
             </p>
@@ -116,14 +147,26 @@ const Search = (props: SearchProps) => {
     );
   });
 
+  const noResultsStyle: React.CSSProperties = {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "100%",
+    width: "100%",
+  };
+
   return (
     <>
-      <div className="search">
-        <form onSubmit={submitHandler} id="search">
-          <input type="text" placeholder="Search" name="searchOutput" />
-          <button type="submit" form="search">
-            Search
-          </button>
+      <div className="search" >
+        <form style={{display:"flex", alignItems:"center"}} onSubmit={submitHandler} id="search">
+          <TextField label="Search" variant="outlined" name="searchOutput"/>
+          <IconButton
+            type="submit"
+            form="search"
+            color="success"
+          >
+            <SearchIcon/>
+          </IconButton>
         </form>
         <div className="filter">
           <label htmlFor="filter">Sort by:</label>
@@ -133,8 +176,9 @@ const Search = (props: SearchProps) => {
         </div>
       </div>
       <div className="search-result">
-        {podcastList}
-      </div>
+      {podcastList.length === 0 && <div style={noResultsStyle}>No results found</div>}
+      {podcastList && (podcastList)}
+        </div>
     </>
   );
 };

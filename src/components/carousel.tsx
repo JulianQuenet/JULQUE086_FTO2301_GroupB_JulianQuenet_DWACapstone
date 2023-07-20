@@ -17,19 +17,19 @@ interface Lists {
 export const Carousel = (props: Lists) => {
   const { items } = props;
 
-  const slicedItem = items.slice(0, 11);
+  const slicedItem = items.slice(0, 13);
   const slides = slicedItem.map((preview, index) => {
     return <SwiperSlide key={index}>{preview}</SwiperSlide>;
   });
 
   return (
-    <div className="carousel">
+    <div className="carousel" style={{marginTop:"20px"}}>
+      <div style={{color:"ThreeDDarkShadow", textAlign:"center"}}>You may also be interested in:</div>
       <Swiper
         effect={"coverflow"}
-        grabCursor={true}
         centeredSlides={true}
         slidesPerView={"auto"}
-        initialSlide={4}
+        initialSlide={6}
         coverflowEffect={{
           rotate: 5,
           stretch: -50,
