@@ -11,7 +11,7 @@ interface cardProps {
   name: string;
 }
 
-const GENRES: { [key: string]: number } = {
+export const GENRES: { [key: string]: number } = {
   "Personal Growth": 1,
   "True Crime and Investigative Journalism": 2,
   History: 3,
@@ -47,7 +47,7 @@ const FilteredModal = (props: cardProps) => {
 
   return (
     <>
-      <div className="backdrop"></div>
+      {open && <div className="backdrop"></div>}
       <dialog open={open} className="modal">
         <div className="inputs">
           <IconButton onClick={toggle} color="info"><CloseIcon /></IconButton>

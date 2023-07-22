@@ -117,6 +117,7 @@ const Modal = (props: cardProps) => {
   }, [episodeIndex]);
 
   const options = seasons.map((item, index) => {
+    if (!item) return;
     return (
       <option key={index} value={index}>
         Season {index + 1}
@@ -495,8 +496,8 @@ const Modal = (props: cardProps) => {
           <div>
             <section className="modal-container">
               <div className="inputs">
-                <IconButton color="info">
-                  <CloseIcon color="info" onClick={handleClick} />
+                <IconButton color="info" onClick={handleClick}>
+                  <CloseIcon color="info" />
                 </IconButton>
                 <select onChange={getEpisode} value={index}>
                   {options}
@@ -504,7 +505,15 @@ const Modal = (props: cardProps) => {
               </div>
               <div style={getBackground(image)}>{player}</div>
             </section>
-            <p style={{ margin: "5px 15px", fontFamily:"monospace", color:"darkorange" }}>Episodes: {episodes.length}</p>
+            <p
+              style={{
+                margin: "5px 15px",
+                fontFamily: "monospace",
+                color: "darkorange",
+              }}
+            >
+              Episodes: {episodes.length}
+            </p>
             <div className="list">{episodeList}</div>
           </div>
         )}

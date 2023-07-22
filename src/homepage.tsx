@@ -5,11 +5,13 @@ import Modal from "./components/modal";
 import Genres from "./components/genres";
 import FilteredModal from "./components/modal.filtered";
 import Search from "./components/search";
-import ModalWatched from "./components/modal.watched";
+import WatchedModal from "./components/modal.watched";
 import Header from "./components/header";
 import FavoritesModal from "./components/modal.favorites";
-import ModalSettings from "./components/modal.settings";
+import Footer from "./components/footer";
+import SettingsModal from "./components/modal.settings";
 import { INDEX } from "./components/modal";
+import { WaveSpinner } from "react-spinners-kit";
 import "./index.css";
 
 const URL: String = "https://podcast-api.netlify.app/shows";
@@ -27,14 +29,27 @@ const Homepage = (props: homePageProps) => {
   const [showFavorites, setShowFavorites] = React.useState<boolean>(false);
   const [showViewed, setShowViewed] = React.useState<boolean>(false);
   const [genre, setGenre] = React.useState<string>("");
+  const [loading, setLoading] = React.useState<boolean>(false);
   const { user } = props;
 
   React.useEffect(() => {
     const getList = async () => {
-      const res = await fetch(`${URL}`);
-      const data = await res.json();
-      data[12].title = "Truth & Justice with Bob Ruff";
-      setList(data);
+      try {
+        setLoading(true);
+        const res = await fetch(`${URL}`);
+        const data = await res.json();
+        data[12].title = "Truth & Justice with Bob Ruff";
+        setList(data);
+        if (!res) {
+          throw new Error(`${res} returned null`);
+        }
+      } catch (error) {
+        alert(error);
+      } finally {
+        setTimeout(() => {
+          setLoading(false);
+        }, 1000);
+      }
     };
     getList();
   }, []);
@@ -103,51 +118,81 @@ const Homepage = (props: homePageProps) => {
     document.body.style.overflowY = "hidden";
   } else document.body.style.overflowY = "scroll";
 
+  const loadingStyles: React.CSSProperties = {
+    height: "100vh",
+    width: "100vw",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  };
+
   return (
     <>
-      <section className="hero">
-      <Header user={user} toggle={toggleSettings} />
-        <Search openGenre={handleFiltered} filter={list} handleClick={handleClick} />
-      </section>
-      {on && (
-        <Modal on={on} toggle={toggleOn} path={id} shows={list} user={user} />
+      {loading && (
+        <div className="loading" style={loadingStyles}>
+          <WaveSpinner size={30} color="#fff" loading={loading} />
+        </div>
       )}
-      {filtered && (
-        <FilteredModal
-          name={genre}
-          open={filtered}
-          toggle={toggleFiltered}
-          handleClick={handleClick}
-          shows={list}
-        />
+      {!loading && (
+        <section>
+          <section className="hero">
+            <Header user={user} toggle={toggleSettings} />
+            <Search
+              openGenre={handleFiltered}
+              filter={list}
+              handleClick={handleClick}
+            />
+          </section>
+
+          {on && (
+            <Modal
+              on={on}
+              toggle={toggleOn}
+              path={id}
+              shows={list}
+              user={user}
+            />
+          )}
+
+          <FilteredModal
+            name={genre}
+            open={filtered}
+            toggle={toggleFiltered}
+            handleClick={handleClick}
+            shows={list}
+          />
+          <SettingsModal
+            toggle={toggleSettings}
+            open={showSettings}
+            user={user}
+            toggleFavorites={toggleFavorites}
+            toggleViewed={toggleViewed}
+          />
+          {showFavorites && (
+            <FavoritesModal
+              toggle={toggleFavorites}
+              open={showFavorites}
+              user={user}
+              handleClick={handleClick}
+            />
+          )}
+
+          {showViewed && (
+            <WatchedModal
+              handleClick={handleClick}
+              toggle={toggleViewed}
+              open={showViewed}
+              user={user}
+            />
+          )}
+          <div className="lowerMain">
+            <Carousel items={lists} />
+            <Genres toggle={handleFiltered} />
+          </div>
+
+          <Footer />
+        </section>
       )}
-      {showSettings && (
-        <ModalSettings
-          toggle={toggleSettings}
-          open={showSettings}
-          user={user}
-          toggleFavorites={toggleFavorites}
-          toggleViewed={toggleViewed}
-        />
-      )}
-      {showFavorites && (
-        <FavoritesModal
-          toggle={toggleFavorites}
-          open={showFavorites}
-          user={user}
-          handleClick={handleClick}
-        />
-      )}
-      {showViewed && (
-        <ModalWatched
-          handleClick={handleClick}
-          toggle={toggleViewed}
-          open={showViewed}
-          user={user}
-        />
-      )}
-       <Carousel items={lists} />
-       <Genres toggle={handleFiltered} />
     </>
   );
 };

@@ -29,14 +29,27 @@ const Genres = (props: genreProps) => {
 
   const getStyles = (index: number) => {
     const styles = GENRES.map((item, index) => {
+      if(!item) return;
       return {
-        background: `url(../../meta/backgrounds-genre/${index + 1}.png)`,
+        background: `url(./src/assets/backgrounds-genre/${index + 1}.png)`,
         backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
       };
     });
     return styles[index];
   };
+
+  const titleStyles: React.CSSProperties = {
+    width: "100%",
+    height: "50%",
+    backdropFilter: "blur(3px)",
+    backgroundColor: "rgba(0,0,0,0.75)",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: "5px",
+    color: "darkkhaki",
+  }
 
   const slides = GENRES.map((genre, index) => {
     return (
@@ -47,7 +60,7 @@ const Genres = (props: genreProps) => {
         id={genre}
         style={getStyles(index)}
       >
-        {genre}
+        <div style={titleStyles}>{genre}</div>
       </SwiperSlide>
     );
   });

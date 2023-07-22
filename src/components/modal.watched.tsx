@@ -40,7 +40,7 @@ interface WatchedProps {
   handleClick: (e: React.MouseEvent<HTMLDivElement>) => void;
 }
 
-const ModalWatched = (props: WatchedProps) => {
+const WatchedModal = (props: WatchedProps) => {
   const [watched, setWatched] = React.useState<any[]>([]);
   const [completed, setCompleted] = React.useState<any[]>([]);
   const [loading, setLoading] = React.useState<boolean>(false);
@@ -111,16 +111,60 @@ const ModalWatched = (props: WatchedProps) => {
     );
   });
 
+
+  const completedList = completed.map((item, index) => {
+    return (
+      <div
+        key={index}
+        className="wrapper"
+        id={item.episode_id}
+        data-season={item.season}
+        data-episode={item.episode}
+        onClick={handleClick}
+      >
+        <div className="list-info">
+          <img src={item.image} width={80} alt={item.title} />
+          <div>
+            <p className="list-title">{item.title}</p>
+            <div className="list-season">Season {item.season}</div>
+            <div className="list-season">Episode {item.episode}</div>
+          </div>
+        </div>
+        <div className="updated">Completed:{formattedDate(item.added)}</div>
+      </div>
+    );
+  });
+
+
+
+
+  const messageStyle: React.CSSProperties = {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "80%",
+    width: "100%",
+    color: "darkgray",
+  };
+
+  const Message = () => {
+    return (
+      <div className="empty" style={messageStyle}>
+        There are no items in this list
+      </div>
+    );
+  };
+
   return (
     <>
-      <div className="backdrop"></div>
+       <div className="backdrop"></div>
       <dialog open={open} className="modal">
         {loading && (
           <div className="loading">
             <FlagSpinner size={40} color="#fff" loading={loading} />
           </div>
         )}
-        {!loading && watched.length !== 0 && (
+        {!loading &&(
           <div style={{ height: "100%" }}>
             <div className="inputs">
               <IconButton onClick={toggle} color="info">
@@ -129,9 +173,9 @@ const ModalWatched = (props: WatchedProps) => {
             </div>
             <div className="card-display">History</div>
             <div style={{ width: "95%", margin: "0 auto" }}>Viewed</div>
-            <div className="watched">{watchedList}</div>
+            <div className="watched">{ watchedList.length === 0? <Message /> : watchedList }</div>
             <div style={{ width: "95%", margin: "0 auto" }}>Completed</div>
-            <div className="watched completed">{watchedList}</div>
+            <div className="watched completed">{ completedList.length === 0? <Message /> : completedList }</div>
           </div>
         )}
       </dialog>
@@ -139,4 +183,4 @@ const ModalWatched = (props: WatchedProps) => {
   );
 };
 
-export default ModalWatched;
+export default WatchedModal;

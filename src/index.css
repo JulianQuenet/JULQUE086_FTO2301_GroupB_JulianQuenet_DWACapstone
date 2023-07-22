@@ -30,13 +30,14 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px;
+  padding: 15px 10px;
   background-color: rgba(48, 47, 47, 0.5);
   backdrop-filter: blur(4.5px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.089);
   position: sticky;
   top: 0;
   z-index: 98;
+  font-size: 0.8rem;
 }
 
 .user-section {
@@ -69,12 +70,25 @@ body {
   backdrop-filter: blur(10px);
   padding: 5px;
   animation: slideIn 0.5s;
-  max-width: 350px;
   text-align: center;
   border: 1.5px solid rgba(255, 255, 255, 0.089);
   border-radius: 10px;
   height: 100vh;
   z-index: 99;
+  flex-wrap: wrap;
+}
+
+.settings-info{
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width:250px;
+  font-family: Arial, Helvetica, sans-serif;
+  margin-top: 10px;
+  font-size: 0.8rem;
+  color: lightgray,
 }
 
 .user-button {
@@ -133,6 +147,13 @@ img {
   border-radius: 8px;
   cursor: pointer;
   font-size: 0.8rem;
+  transition: all 0.1s ease-in-out;
+}
+
+.show:hover {
+  background-color: rgba(1, 11, 24, 0.39);
+  transition-duration: 0.1s;
+  transform: translate3d(0, -1px, 0);
 }
 
 .show-title {
@@ -194,6 +215,7 @@ img {
   padding: 5px;
 }
 
+
 .primary {
   z-index: 101;
 }
@@ -221,11 +243,6 @@ img {
   }
 }
 
-@media (max-width: 30rem) {
-  .modal {
-    width: 95vw;
-  }
-}
 
 .card-display {
   margin: 5px auto;
@@ -263,11 +280,7 @@ img {
   align-items: center;
 }
 
-@media (max-width: 30rem) {
-  .episode {
-    font-size: 0.65rem;
-  }
-}
+
 
 .list {
   margin: 10px auto;
@@ -318,21 +331,21 @@ img {
 }
 
 .genre {
-  color: grey;
   font-size: 0.8rem;
   background-color: #0e0d0d;
   display: flex;
   justify-content: center;
   align-items: center;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
 }
 
-@media (max-width: 30rem) {
-  .genre {
-    width: 200px;
-    height: 100px;
-    font-size: 0.65rem;
-  }
+.genre:hover {
+  transition-duration: 0.1s;
+  transform: translateY(-2.5px)
 }
+
 
 .wrapper {
   display: flex;
@@ -384,16 +397,6 @@ img {
   margin-left: 15px;
 }
 
-@media (max-width: 30rem) {
-  .wrapper .updated {
-    font-size: 0.5rem;
-  }
-
-  .list-info {
-    font-size: 0.65rem;
-  }
-}
-
 .search {
   display: flex;
   justify-content: center;
@@ -432,6 +435,8 @@ img {
   height: 300px;
   border-radius: 10px;
   padding: 5px;
+  animation: enter 0.5s;
+
 }
 
 .search-result-item .updated{
@@ -463,7 +468,7 @@ img {
   width: 100%;
   height: 100%;
   backface-visibility: hidden;
-  background: rgba(163, 119, 119, 0.05);
+  background-color: rgba(0, 0, 0, 0.40);
   border-radius: 44px;
   box-shadow: 0 0 7.55px rgba(0, 0, 0, 0.65), 0 0 10px rgba(0, 0, 0, 0.35),
     0 0 15px rgba(0, 0, 0, 0.15);
@@ -488,6 +493,12 @@ img {
   align-items: center;
   height: 50%;
   padding-bottom: 10px;
+  font-size: 1rem;
+}
+
+.search-info-title{
+  margin: 5px auto;
+  color: rgb(160, 160, 132);
 }
 
 .filterSlide {
@@ -538,5 +549,81 @@ img {
   border-radius: 10px;
   box-shadow: 0 0 7.55px rgba(0, 0, 0, 0.65), 0 0 10px rgba(0, 0, 0, 0.35),
     0 0 15px rgba(0, 0, 0, 0.15);
+}
+
+.lowerMain{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 20px;
+  height: 100%;
+}
+
+@media (max-width: 52rem) {
+
+  .search-info{
+    font-size: 0.8rem;
+  }
+
+  .modal {
+    width: 95vw;
+  }
+
+  .search-result-item {
+    width: 150px;
+  }
+}
+
+@media (max-width: 40rem){
+  .genre {
+    width: 200px;
+    height: 100px;
+    font-size: 0.65rem;
+  }
+
+  .list-info {
+    font-size: 0.65rem;
+  }
+
+  .episode {
+    font-size: 0.65rem;
+  }
+
+  .modal {
+    width: 99vw;
+  }
+
+  .list-title{
+    font-size: 0.65rem;
+  }
+
+  .wrapper .updated {
+    flex-wrap: nowrap;
+    font-size: 0.65rem;
+    color: grey;
+    margin-left: 15px;
+  }
+
+  label {
+    font-size: 0.75rem;
+  }
+
+  .searchBar{
+    width: 130px;
+  }
+
+  .search-result-item {
+    width: 140px;
+  }
+
+}
+
+@media (max-width: 30rem){
+  .wrapper .updated {
+    flex-wrap: nowrap;
+    font-size: 0.55rem;
+    color: grey;
+    margin-left: 15px;
+  }
 }
 

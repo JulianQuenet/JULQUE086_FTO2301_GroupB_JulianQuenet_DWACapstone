@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import IconButton from "@mui/material/IconButton/IconButton";
 import Button from "@mui/material/Button/Button";
 import WarningAmberIcon from "@mui/icons-material/WarningAmber";
 import CloseIcon from "@mui/icons-material/Close";
 import supabase from "../../supabaseClient";
 import { useNavigate } from "react-router-dom";
+
 
 interface modalProps {
   toggle: () => void;
@@ -14,7 +15,7 @@ interface modalProps {
   toggleViewed: () => void;
 }
 
-const ModalSettings = (props: modalProps) => {
+const SettingsModal = (props: modalProps) => {
   const { toggle, open, user, toggleFavorites, toggleViewed } = props;
 
   const navigate = useNavigate();
@@ -30,41 +31,48 @@ const ModalSettings = (props: modalProps) => {
   };
 
   const handleReset = async () => {
-    try {
-      const { error } = await supabase
-        .from("User favorites")
-        .delete()
-        .eq("user_id", user.user.id);
-      if (error) throw error;
-    } catch (error) {
-      alert("something went wrong, please refresh the page");
-    }
-    try {
-      const { error } = await supabase
-        .from("User history")
-        .delete()
-        .eq("user_id", user.user.id);
-      if (error) throw error;
-    } catch (error) {
-      alert("something went wrong, please refresh the page");
-    }
-    try {
-      const { error } = await supabase
-        .from("User completed")
-        .delete()
-        .eq("user_id", user.user.id);
-      if (error) throw error;
-    } catch (error) {
-      alert("something went wrong, please refresh the page");
-    }
-    try {
-      const { error } = await supabase
-        .from("User timestamps")
-        .delete()
-        .eq("user_id", user.user.id);
-      if (error) throw error;
-    } catch (error) {
-      alert("something went wrong, please refresh the page");
+    const confirmation = window.confirm(
+      "This action is irreversible, are you sure you want to continue?"
+    );
+    if (confirmation) {
+      try {
+        const { error } = await supabase
+          .from("User favorites")
+          .delete()
+          .eq("user_id", user.user.id);
+        if (error) throw error;
+      } catch (error) {
+        alert("something went wrong, please refresh the page");
+      }
+      try {
+        const { error } = await supabase
+          .from("User history")
+          .delete()
+          .eq("user_id", user.user.id);
+        if (error) throw error;
+      } catch (error) {
+        alert("something went wrong, please refresh the page");
+      }
+      try {
+        const { error } = await supabase
+          .from("User completed")
+          .delete()
+          .eq("user_id", user.user.id);
+        if (error) throw error;
+      } catch (error) {
+        alert("something went wrong, please refresh the page");
+      }
+      try {
+        const { error } = await supabase
+          .from("User timestamps")
+          .delete()
+          .eq("user_id", user.user.id);
+        if (error) throw error;
+      } catch (error) {
+        alert("something went wrong, please refresh the page");
+      } finally {
+        window.location.reload();
+      }
     }
   };
 
@@ -85,6 +93,7 @@ const ModalSettings = (props: modalProps) => {
     fontSize: "0.8rem",
     color: "lightgray",
     textAlign: "center",
+    marginTop: "1rem",
   };
 
   const settingsHeaderStyles: React.CSSProperties = {
@@ -96,13 +105,17 @@ const ModalSettings = (props: modalProps) => {
     padding: "0.2rem",
   };
 
+  const {protocol, host} = window.location;
+
+  
+
   return (
     <>
       <dialog open={open} className="settings-modal">
         <div className="settings-header" style={settingsHeaderStyles}>
           <div style={{ margin: "5px" }}>Settings menu</div>
-          <IconButton color="info">
-            <CloseIcon color="info" onClick={toggle} />
+          <IconButton color="info"onClick={toggle}  >
+            <CloseIcon color="info"/>
           </IconButton>
         </div>
         <div className="control-options" style={controlStyles}>
@@ -110,16 +123,23 @@ const ModalSettings = (props: modalProps) => {
             <button className="user-button" onClick={toggleFavorites}>
               Go to Favorites
             </button>
-            <button className="user-button" onClick={toggleViewed}>See history</button>
+            <button className="user-button" onClick={toggleViewed}>
+              See history
+            </button>
             <button onClick={signOut} className="user-button">
               Sign out
             </button>
+            <div className="settings-info"><p>
+              You can share your favorites with you friends via the link below provided they have this code:
+            </p>
+            <div style={{ width: "250px", fontSize:"0.7rem", color:"darkkhaki" }}>{user.user.id}</div></div>
+            <button className="user-button" onClick={()=>navigate("/favorites")}>{protocol}//{host}/favorites</button>
           </div>
           <div className="danger-zone" style={dangerStyles}>
             <div style={{ display: "flex", alignItems: "center" }}>
               Danger zone <WarningAmberIcon style={{ color: "lightyellow" }} />
             </div>
-            <p style={{width:"250px"}}>
+            <p style={{ width: "250px" }}>
               Please note that this action will erase all your data, you will
               still be able to log in, but all your data in terms of favorites,
               timestamps and watch history will be deleted.
@@ -139,4 +159,4 @@ const ModalSettings = (props: modalProps) => {
   );
 };
 
-export default ModalSettings;
+export default SettingsModal;

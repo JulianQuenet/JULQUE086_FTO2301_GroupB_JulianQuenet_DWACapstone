@@ -8,6 +8,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { SORTING__OPTIONS } from "./search";
 import { formattedDate } from "./show";
 
+
 interface modalProps {
   toggle: () => void;
   open: boolean;
@@ -16,17 +17,13 @@ interface modalProps {
 }
 
 
-
-
-
-
-
 const FavoritesModal = (props: modalProps) => {
   const { toggle, open, user, handleClick } = props;
   const [favorites, setFavorites] = React.useState<any[]>([]);
   const [favReference, setFavReference] = React.useState<any[]>([]);
   const [loading, setLoading] = React.useState<boolean>(false);
   const [value, setValue] = React.useState<string>("Default");
+
 
   React.useEffect(() => {
     const getFavorites = async () => {
@@ -63,6 +60,10 @@ const FavoritesModal = (props: modalProps) => {
   };
 
   const removeFavorite = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    const confirmation = window.confirm(
+      "Are you sure you want to remove this from your favorites?"
+    );
+    if (!confirmation) return;
     const index = e.currentTarget.dataset.index;
     const id = e.currentTarget.id;
     try {
@@ -71,7 +72,9 @@ const FavoritesModal = (props: modalProps) => {
             .delete()
             .eq("id", id);
         if (error) throw error;
-        const newFavorites = favorites.filter((item, i) => i !== Number(index));
+        const newFavorites = favorites.filter((item, i) => {
+          if(!item)return
+          return i !== Number(index)});
         setFavorites(newFavorites);
         setFavReference(newFavorites);
         setValue("Default");
@@ -97,10 +100,7 @@ const FavoritesModal = (props: modalProps) => {
                onClick={handleClick} style={{ display: "flex", gap: "0.5rem", alignItems: "center", width:"100%" }}>
             <img src={item.image} className="list-image favorites" />
             <div>
-              <h4 style={{ fontWeight: "350", fontFamily: "monospace" }}>
-                Show: {item.showTitle}
-              </h4>
-              <p className="list-title" style={{ color: "lightslategray" }}>
+            <p className="list-title" style={{ color: "lightslategray" }}>
                 {item.title}
               </p>
               <div style={miniInfoStyles}>
@@ -110,6 +110,9 @@ const FavoritesModal = (props: modalProps) => {
                   <div className="list-season">Season: {item.season}</div>
                   <p className="list-episode">Episode: {item.episode}</p>
                 </div>
+                <h4 style={{ fontWeight: "350", fontFamily: "monospace" }}>
+                Show: {item.showTitle}
+              </h4>
                 <div
                   style={{
                     color: "gray",
@@ -190,12 +193,12 @@ const FavoritesModal = (props: modalProps) => {
     }
     setFavReference(sortedResult);
   }
+ 
 
   return (
-    <>
-      {" "}
-      <div className="backdrop"></div>
-      <dialog open={open} className="modal">
+    <>  
+        <div className="backdrop"></div>
+        <dialog open={open} className="modal">
         {loading && (
           <div className="loading">
             <FlagSpinner size={40} color="#fff" loading={loading} />
@@ -209,12 +212,14 @@ const FavoritesModal = (props: modalProps) => {
             <div className="card-display">
               {user.user.user_metadata.full_name}'s favorites
             </div>
-            <label htmlFor="sort">Sort by:</label>
+              <label style={{marginLeft:"10px"}} htmlFor="sort">Sort by:</label>
             <select className="sort" onChange={sortBy} value={value} name="sort">{options}</select>
+            
             {empty ? <Message /> : <div className="list favorite">{list}</div>}
           </div>
         )}
       </dialog>
+      
     </>
   );
 };
