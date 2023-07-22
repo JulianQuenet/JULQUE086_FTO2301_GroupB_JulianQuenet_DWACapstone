@@ -1,5 +1,6 @@
 import SettingsIcon from "@mui/icons-material/Settings";
 import IconButton from "@mui/material/IconButton/IconButton";
+import logo from "../assets/mic-logo.png"
 
 
 interface headerProps {
@@ -21,7 +22,7 @@ const Header = (props: headerProps) => {
     <>
       <div className="header">
         <div style={headerStyles}>
-          <img src="./src/assets/mic-logo.png" width={60} />
+          <img src={logo} width={60} />
           <div style={{ color: "Highlight" }}>PODLY</div>
         </div>
         <div className="user-section">
