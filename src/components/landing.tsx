@@ -11,9 +11,9 @@ interface LandingProps {
 const Landing = (props: LandingProps) => {
   const { setUser } = props;
   const [newUser, setNewUser] = React.useState<boolean>(true);
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // Navigate to the homepage after login
 
-  const signUp = (e: React.FormEvent<HTMLFormElement>) => {
+  const signUp = (e: React.FormEvent<HTMLFormElement>) => {//Sign up function and logic, connects to supabase to create account and checks for errors
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
@@ -54,13 +54,13 @@ const Landing = (props: LandingProps) => {
     alert("Check your email for a confirmation link");
   };
 
-  const signIn = (e: React.FormEvent<HTMLFormElement>) => {
+  const signIn = (e: React.FormEvent<HTMLFormElement>) => {//Sign in function and logic, connects to supabase and checks for errors
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
     const data: { [key: string]: string } = {};
     formData.forEach((value, key) => {
-      if (value === "" || value === null) return;
+      if (value === "" || value === null)return;
       data[key] = String(value);
     });
 
@@ -78,7 +78,7 @@ const Landing = (props: LandingProps) => {
         setUser(data);
         navigate("/homepage");
       } catch (error) {
-        alert(error);
+        alert("Something went wrong, please try again");
       }
     };
 

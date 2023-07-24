@@ -20,6 +20,11 @@ interface homePageProps {
   user: any;
 }
 
+/**The main functional component for the application, it contains the state for the modal, the filtered modal, the favorites modal and
+for the history modal, in terms of whether they are open or closed, also houses most of the onCLick events for the application
+and does the main api call to pass down the data to the necessary child components
+*/
+
 const Homepage = (props: homePageProps) => {
   const [list, setList] = React.useState<any[]>([]);
   const [on, setOn] = React.useState<boolean>(false);
@@ -32,6 +37,10 @@ const Homepage = (props: homePageProps) => {
   const [loading, setLoading] = React.useState<boolean>(false);
   const { user } = props;
 
+  /**
+   * @description This is the main api call for the application, it gets the data from the api and sets the state
+   * based on the data retrieved, it also sets the title of the show at index 12 to the correct title
+   */
   React.useEffect(() => {
     const getList = async () => {
       try {
@@ -46,7 +55,7 @@ const Homepage = (props: homePageProps) => {
       } catch (error) {
         alert(error);
       } finally {
-        setTimeout(() => {
+        setTimeout(() => {//Fake loading time as the api call is very fast
           setLoading(false);
         }, 1000);
       }
@@ -54,6 +63,12 @@ const Homepage = (props: homePageProps) => {
     getList();
   }, []);
 
+  /**
+   * If the show is clicked the modal player is opened with the relevant data based on the id, the index is also 
+   * used if the data sets are available in order to set the player to the correct episode and season, this only comes
+   * into play in the favorites modal and history modal
+   * @param e :React.MouseEvent<HTMLDivElement>
+   */
   const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!e.target) {
       throw new Error(`${e.target} returned null`);
@@ -73,6 +88,7 @@ const Homepage = (props: homePageProps) => {
     setShowFavorites(false);
   };
 
+  //Brings up the genres modal and set the genre to the name of the genre clicked which will be displayed in the modal
   const handleFiltered = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!e.target) {
       throw new Error(`${e.target} returned null`);
@@ -83,32 +99,38 @@ const Homepage = (props: homePageProps) => {
     toggleFiltered();
   };
 
+  //Opens and closes the played modal
   const toggleOn = () => {
     setOn(!on);
   };
 
+  //Opens and closes the genres modal
   const toggleFiltered = () => {
     setFiltered(!filtered);
   };
+  //Opens and closes the favorites modal
   const toggleFavorites = () => {
     setShowFavorites(!showFavorites);
     setShowSettings(false);
   };
 
+  //Opens and closes the settings modal
   const toggleSettings = () => {
     setShowSettings(!showSettings);
   };
 
+  //Opens and closes the history modal
   const toggleViewed = () => {
     setShowViewed(!showViewed);
     setShowSettings(false);
   };
 
+  //Maps the list of shows to create preview cards for the carousel, lists is then passed to the carousel component
   const lists = list.map((item) => {
     return <Shows key={item.id} item={item} handleClick={handleClick} />;
   });
 
-  if (on) {
+  if (on) {//If any of the modals are open the body is set to overflow hidden to prevent scrolling, except for the settings modal
     document.body.style.overflowY = "hidden";
   } else if (filtered) {
     document.body.style.overflowY = "hidden";
@@ -126,6 +148,9 @@ const Homepage = (props: homePageProps) => {
     alignItems: "center",
   };
 
+
+  //All components are rendered here, the loading spinner is rendered if the loading state is true and all the modals are rendered conditionally
+  //Except for the settings modal and filtered modal as the don't make any calls to the database
   return (
     <>
       {loading && (

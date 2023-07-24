@@ -18,7 +18,10 @@ interface modalProps {
 const SettingsModal = (props: modalProps) => {
   const { toggle, open, user, toggleFavorites, toggleViewed } = props;
 
-  const navigate = useNavigate();
+  const navigate = useNavigate();//Navigate to the favorites section 
+  /**
+   * @description This is the function that signs the user out of the application and removes the user from the session storage
+   */
   const signOut = async () => {
     try {
       const { error } = await supabase.auth.signOut();
@@ -30,6 +33,10 @@ const SettingsModal = (props: modalProps) => {
     }
   };
 
+  /**
+   * @description This is the function that resets the user's data, it deletes all the user's data from the database
+   * and then reloads the page, only if confirmation is given 
+   */
   const handleReset = async () => {
     const confirmation = window.confirm(
       "This action is irreversible, are you sure you want to continue?"
@@ -105,7 +112,8 @@ const SettingsModal = (props: modalProps) => {
     padding: "0.2rem",
   };
 
-  const {protocol, host} = window.location;
+
+  const {protocol, host} = window.location;//Get the protocol and host from the window object i.e. http://localhost:3000
 
   
 
@@ -130,7 +138,7 @@ const SettingsModal = (props: modalProps) => {
               Sign out
             </button>
             <div className="settings-info"><p>
-              You can share your favorites with you friends via the link below provided they have this code:
+              You can share your favorites with your friends via the link below provided they have this code:
             </p>
             <div style={{ width: "250px", fontSize:"0.7rem", color:"darkkhaki" }}>{user.user.id}</div></div>
             <button className="user-button" onClick={()=>navigate("/favorites")}>{protocol}//{host}/favorites</button>

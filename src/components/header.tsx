@@ -8,7 +8,7 @@ interface headerProps {
   toggle: () => void;
 }
 
-const Header = (props: headerProps) => {
+const Header = (props: headerProps) => { //Really nothing fancy here, just the run of the mill header
   const { user, toggle } = props;
 
   const headerStyles: React.CSSProperties = {

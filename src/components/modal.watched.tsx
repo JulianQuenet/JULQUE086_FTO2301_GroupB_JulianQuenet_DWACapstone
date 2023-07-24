@@ -2,8 +2,10 @@ import React from "react";
 import supabase from "../../supabaseClient";
 import { formattedDate } from "./show";
 import CloseIcon from "@mui/icons-material/Close";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { IconButton } from "@mui/material";
 import { FlagSpinner } from "react-spinners-kit";
+import Tooltip from "@mui/material/Tooltip";
 
 import "swiper/css";
 
@@ -28,7 +30,7 @@ interface HistoryType {
   COMPLETED: episodeProps[];
 }
 
-export const HISTORY: HistoryType = {
+export const HISTORY: HistoryType = {//Used to communicate between the watched modal and the show component
   WATCHLIST: [],
   COMPLETED: [],
 };
@@ -46,6 +48,10 @@ const WatchedModal = (props: WatchedProps) => {
   const [loading, setLoading] = React.useState<boolean>(false);
   const { user, toggle, open, handleClick } = props;
 
+  /**
+   * @description When the component mounts, this function gets the user's history from the database and sets the state
+   * based on the user's retrieved data, the history is then sorted by the date it was added to the database in a descending order
+   */
   React.useEffect(() => {
     const getHistory = async () => {
       try {
@@ -83,11 +89,64 @@ const WatchedModal = (props: WatchedProps) => {
     getHistory();
   }, []);
 
+  /**
+   * @description When the history is updated the local state is updated to reflect the changes
+   */
   React.useEffect(() => {
     setWatched(HISTORY.WATCHLIST);
     setCompleted(HISTORY.COMPLETED);
   }, [HISTORY.WATCHLIST, HISTORY.COMPLETED]);
 
+
+  /**
+   * @description This is the function that clears the user's history, it deletes all the user's history from the database
+   * and then reloads the page, only if confirmation is given by the user
+   */
+  const clearHistoryHandler = async () => {
+    const confirmation = window.confirm("This action will clear your history, are you sure you wish to continue?");
+    if (confirmation) {
+      try {
+        setLoading(true);
+        const { error } = await supabase
+          .from("User history")
+          .delete()
+          .eq("user_id", user.user.id);
+        if (error) throw error;
+      } catch (error) {
+        alert("something went wrong, please refresh the page");
+      }
+      try {
+        setLoading(true);
+        const { error } = await supabase
+          .from("User completed")
+          .delete()
+          .eq("user_id", user.user.id);
+        if (error) throw error;
+      } catch (error) {
+        alert("something went wrong, please refresh the page");
+      }
+      try {
+        setLoading(true);
+        const { error } = await supabase
+          .from("User timestamps")
+          .delete()
+          .eq("user_id", user.user.id);
+        if (error) throw error;
+      } catch (error) {
+        alert("something went wrong, please refresh the page");
+      }finally{
+        setLoading(false);
+        HISTORY.WATCHLIST = [];
+        HISTORY.COMPLETED = [];
+        setWatched([]);
+        setCompleted([]);
+      }
+    }
+  };
+
+  /**
+   * @description Maps over the watched and completed arrays and returns a div with the information of the show
+   */
   const watchedList = watched.map((item, index) => {
     return (
       <div
@@ -111,7 +170,7 @@ const WatchedModal = (props: WatchedProps) => {
     );
   });
 
-
+  //Same principle as above but just for the completed array
   const completedList = completed.map((item, index) => {
     return (
       <div
@@ -135,9 +194,6 @@ const WatchedModal = (props: WatchedProps) => {
     );
   });
 
-
-
-
   const messageStyle: React.CSSProperties = {
     display: "flex",
     justifyContent: "center",
@@ -155,16 +211,17 @@ const WatchedModal = (props: WatchedProps) => {
     );
   };
 
+  //The modal is rendered here and displays the watched and completed lists, if there are no items in the list then a message is displayed
   return (
     <>
-       <div className="backdrop"></div>
+      <div className="backdrop"></div>
       <dialog open={open} className="modal">
         {loading && (
           <div className="loading">
             <FlagSpinner size={40} color="#fff" loading={loading} />
           </div>
         )}
-        {!loading &&(
+        {!loading && (
           <div style={{ height: "100%" }}>
             <div className="inputs">
               <IconButton onClick={toggle} color="info">
@@ -172,10 +229,29 @@ const WatchedModal = (props: WatchedProps) => {
               </IconButton>
             </div>
             <div className="card-display">History</div>
-            <div style={{ width: "95%", margin: "0 auto" }}>Viewed</div>
-            <div className="watched">{ watchedList.length === 0? <Message /> : watchedList }</div>
+            <div
+              style={{
+                width: "95%",
+                margin: "0 auto",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              Viewed
+              <Tooltip title="Clear History">
+                <IconButton color="error" onClick={clearHistoryHandler}>
+                <DeleteIcon />
+              </IconButton></Tooltip>
+              
+            </div>
+            <div className="watched">
+              {watchedList.length === 0 ? <Message /> : watchedList}
+            </div>
             <div style={{ width: "95%", margin: "0 auto" }}>Completed</div>
-            <div className="watched completed">{ completedList.length === 0? <Message /> : completedList }</div>
+            <div className="watched completed">
+              {completedList.length === 0 ? <Message /> : completedList}
+            </div>
           </div>
         )}
       </dialog>

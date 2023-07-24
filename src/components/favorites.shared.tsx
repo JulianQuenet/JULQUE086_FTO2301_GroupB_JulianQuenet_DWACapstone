@@ -10,8 +10,12 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import TextField from "@mui/material/TextField";
 import Alert from "@mui/material/Alert";
 
+
+// Compare this snippet from src\components\modal.favorites.tsx, all the same except the delete Icon is removed 
+//and when the exit button is clicked the user is routed to the login section
+
 const FavoritesShared = () => {
-  const [favorites, setFavorites] = React.useState<any[]>([]);
+  const [favorites, setFavorites] = React.useState<any[]>([]); 
   const [favReference, setFavReference] = React.useState<any[]>([]);
   const [loading, setLoading] = React.useState<boolean>(false);
   const [invalid, setInvalid] = React.useState<boolean>(false);

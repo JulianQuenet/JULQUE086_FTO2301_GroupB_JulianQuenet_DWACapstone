@@ -8,7 +8,7 @@
     gap: 20px;
 }
 
-.form-container {
+.form-container {   /* Check MIT license  in Readme, Copyright - 2023 gharsh11032000 (Harsh Gupta) ends at **END** */
     margin: 0 auto;
     height: 450px;
     max-width: 400px;
@@ -87,40 +87,14 @@
     box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.084), 0px 2px 3px rgba(0, 0, 0, 0.168);
   }
   
-  .form-container .form-submit-btn:hover {
+  .form-container .form-submit-btn:hover {  /* **END**  */
     background-color: #313131;
   }
   
-  .form-container .link {
-    color: #1778f2;
-    text-decoration: none;
-  }
-  
-  .form-container .signup-link {
-    align-self: center;
-    font-weight: 500;
-  }
-  
-  .form-container .signup-link .link {
-    font-weight: 400;
-  }
-  
-  .form-container .link:hover {
-    text-decoration: underline;
-  }
 
 
 
-
-
-
-
-
-
-
-
-
-  .checkbox-wrapper-35 .switch {
+  .checkbox-wrapper-35 .switch { /* Check MIT license in Readme Copyright - 2023 Bodyhc (Abdullah M Soliman),ends at **END** */
     display: none;
   }
   
@@ -233,7 +207,7 @@
     transform: translate3d(0, -100%, 0);
   }
   
-  .checkbox-wrapper-35 .switch:checked + label .switch-x-checked {
+  .checkbox-wrapper-35 .switch:checked + label .switch-x-checked { /* **END**  */
     opacity: 1;
     -webkit-transform: none;
     transform: none;

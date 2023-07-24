@@ -17,6 +17,14 @@ import { FlagSpinner } from "react-spinners-kit";
 import supabase from "../../supabaseClient";
 import CloseIcon from "@mui/icons-material/Close";
 
+
+
+/**
+ * This is the main modal component, it is used to display the episodes of a show, it is accessible from the home page
+ * where ever a show is displayed.
+ * 
+ */
+
 export const INDEX: { [key: string]: number } = {
   episode: 0,
   season: 0,
@@ -47,13 +55,13 @@ interface episodeProps {
 }
 
 const Modal = (props: cardProps) => {
-  const { toggle, on, path, shows, user } = props;
+  const { toggle, on, path, shows, user } = props; // Props passed down from the home page, on is used to open/close the modal, path is used to get the show's id
   const [seasons, setSeasons] = React.useState<any[]>([]);
   const [episodes, setEpisodes] = React.useState<episodeProps[]>([]);
   const [image, setImage] = React.useState<string>("");
   const [index, setIndex] = React.useState<number>(0);
   const [episodeIndex, setEpisodeIndex] = React.useState<number>(0);
-  const [open, setOpen] = React.useState<boolean>(false);
+  const [open, setOpen] = React.useState<boolean>(false);//used for the tooltip
   const [favorites, setFavorites] = React.useState<episodeProps[]>([]);
   const [isPlaying, setIsPlaying] = React.useState<boolean>(false);
   const [loading, setLoading] = React.useState<boolean>(false);
@@ -62,6 +70,10 @@ const Modal = (props: cardProps) => {
   const [TIMESTAMPS, setTIMESTAMPS] = React.useState<episodeProps[]>([]);
   const audioRef = useRef<AudioPlayer>(null);
 
+/**
+ * @description This is the function that gets the show's data from the api and sets the state based on the
+ * response, it also sets the season index and episode index based on the INDEX object, as well as the show's data
+ */
   React.useEffect(() => {
     const URL: String = `https://podcast-api.netlify.app/id/${path}`;
     const getCard = async () => {
@@ -100,18 +112,27 @@ const Modal = (props: cardProps) => {
     getCard();
   }, []);
 
-  const isEpisodeIncluded = favorites.some(
+  /**
+   * Boolean used to check if the episode is included in the user's favorites, will be used to determine the icon
+   */
+  const isEpisodeIncluded: boolean = favorites.some(
     (favorite: any) =>
       favorite.title === episodes[episodeIndex].title &&
       favorite.episode === episodes[episodeIndex].episode
   );
 
+  /**
+   * @description This is the function that gets the image of the season based on the season index
+   */
   React.useEffect(() => {
     if (seasons.length >= 1) {
       setImage(seasons[index].image);
     }
   }, [index, seasons]);
 
+  /**
+   * @description This is the function closes the tooltip when the episode index changes
+   */
   React.useEffect(() => {
     setOpen(false);
   }, [episodeIndex]);
@@ -124,6 +145,11 @@ const Modal = (props: cardProps) => {
       </option>
     );
   });
+
+  /**
+   * Gets the season index and sets the episodes based on the season index, i.e. the episodes relevant to the season
+   * @param e : React.ChangeEvent<HTMLSelectElement>
+   */
   const getEpisode = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const index: number = Number(e.target.value);
     setEpisodes(seasons[index].episodes);
@@ -131,6 +157,9 @@ const Modal = (props: cardProps) => {
     setEpisodeIndex(0);
   };
 
+  /**
+   * @description This is the function that sets the background image of the audio player based on the season image
+   */
   const getBackground = (props: string) => {
     return {
       margin: "0 auto",
@@ -143,6 +172,11 @@ const Modal = (props: cardProps) => {
     };
   };
 
+  /**
+   * When an episode is clicked, the episode index is set to the index of the episode that was clicked and the audio player
+   * is updated with the new episode and the audio player is paused if it is playing
+   * @param e : React.MouseEvent<HTMLDivElement>
+   */
   const chooseEpisode = (e: React.MouseEvent<HTMLDivElement>) => {
     const targetId: number = parseInt(e.currentTarget.id);
     setEpisodeIndex(targetId);
@@ -151,13 +185,16 @@ const Modal = (props: cardProps) => {
     }
   };
 
+  /**
+   * @description This is the function that toggles the tooltip
+   */
   const toggleTooltip = () => {
     setOpen(!open);
-    return {
-      transform: "rotate(180deg)",
-    };
   };
 
+  /** 
+   * @description This is the function that creates a custom tooltip component used to house the description of the episode
+  */
   const DescriptionTooltip = styled(({ className, ...props }: TooltipProps) => (
     <Tooltip {...props} classes={{ popper: className }} />
   ))(({ theme }) => ({
@@ -171,6 +208,12 @@ const Modal = (props: cardProps) => {
     },
   }));
 
+
+  /**
+   * @description This is the function that adds/removes the episode from the user's favorites, if the episode is already
+   * in the user's favorites, it is removed, if not, it is added and sets the relevant data to be added to the database 
+   * in order to display correctly in the fav0rites section
+   */
   const addToFavorites = async () => {
     const selectedEpisode = episodes[episodeIndex];
     selectedEpisode.showTitle = showData.title;
@@ -211,6 +254,10 @@ const Modal = (props: cardProps) => {
     }
   };
 
+  /**
+   * @description This is the function that toggles the modal, if the audio player is playing, it pauses the audio player
+   * and confirms if the user wants to leave the page, if the user confirms, the modal is closed, if not, the modal remains open
+   */
   const handleClick = () => {
     if (isPlaying) {
       handlePause();
@@ -223,6 +270,9 @@ const Modal = (props: cardProps) => {
     toggle();
   };
 
+  /**
+   * @description This is the function that gets the current time of the audio player and sets the state based on the current time
+   */
   const handleTime = () => {
     if (audioRef.current?.audio?.current) {
       const timeStamp = audioRef.current.audio.current.currentTime;
@@ -230,6 +280,10 @@ const Modal = (props: cardProps) => {
     }
   };
 
+  /**
+   * Boolean used to check if the episode is included in the user's timestamps, will be used to determine if the episode
+   * should be added or removed from the user's timestamps
+   */
   const timeIsIncluded = TIMESTAMPS.some((item: any) => {
     return (
       item.title === episodes[episodeIndex].title &&
@@ -237,6 +291,10 @@ const Modal = (props: cardProps) => {
     );
   });
 
+  /**
+   * @description This is the function that sets the current time of the audio player to the time stamp of the episode if 
+   * the episode is in the user's timestamps, if not, it sets the current time to 0
+   */
   const handleLoad = () => {
     setIsPlaying(false);
     setCurrentTime(0);
@@ -253,6 +311,11 @@ const Modal = (props: cardProps) => {
       audioRef.current.audio.current.currentTime = time;
   };
 
+  /**
+   * @description This is the function that adds/removes the episode from the user's history, if the episode is already
+   * in the user's history, it is removed and re-added to the front if not, it is added and sets the relevant data to be added to the database
+   * which will be used to display the episode in the history section
+   */
   const handlePLay = async () => {
     const selectedEpisode = episodes[episodeIndex];
     selectedEpisode.episode_id = showData.id;
@@ -303,6 +366,10 @@ const Modal = (props: cardProps) => {
     }
   };
 
+  /**
+   * @description This is the function that pauses the audio player and adds/removes the episode from the user's timestamps, if the episode is already
+   * in the user's timestamps, it is removed, if not, it is added and sets the relevant data to be added to the database
+   */
   const handlePause = async () => {
     setIsPlaying(false);
     const selectedEpisode = episodes[episodeIndex];
@@ -343,6 +410,11 @@ const Modal = (props: cardProps) => {
     }
   };
 
+  /**
+   * Will be used to change to the next episode, if the episode is the last episode, it will change to the first episode and will pause the audio player
+   * if the audio player is playing
+   * @returns void
+   */
   const nextEpisode = () => {
     if (isPlaying) {
       handlePause();
@@ -354,6 +426,11 @@ const Modal = (props: cardProps) => {
     setEpisodeIndex((prev) => prev + 1);
   };
 
+  /**
+   * Will be used to change to the previous episode, if the episode is the first episode, it will change to the last episode and will pause the audio player
+   * if the audio player is playing
+   * @returns void
+   */
   const prevEpisode = () => {
     if (isPlaying) {
       handlePause();
@@ -365,6 +442,11 @@ const Modal = (props: cardProps) => {
     setEpisodeIndex((prev) => prev - 1);
   };
 
+  /** 
+   * @description This is the function that adds/removes the episode from the user's completed history, if the episode is already
+   * in the user's completed history, it is removed and re-added to the front if not, it is added and sets the relevant data to be added to the database
+   * which will be used to display the episode in the completed history section
+  */
   const handleEnded = async () => {
     const selectedEpisode = episodes[episodeIndex];
     selectedEpisode.timeStamp = 0;
@@ -417,6 +499,10 @@ const Modal = (props: cardProps) => {
     }
   };
 
+  /**
+   * maps over the episode and create an audio player for each episode, the audio player is set to the current episode
+   * @returns JSX.Element
+   */
   const player = episodes.map((item, index) => {
     return (
       <div key={index} className="card-display">
@@ -467,21 +553,35 @@ const Modal = (props: cardProps) => {
         />
       </div>
     );
-  })[episodeIndex];
+  })[episodeIndex] // Only the current episode is displayed, will only map over the current episode
 
+
+  /**
+   * maps over the episodes and creates a list of episodes which can be clicked on to change the episode
+   */
   const episodeList = episodes.map((item, index) => {
     return (
-      <div
-        key={index}
-        className="episode wrapper"
-        onClick={chooseEpisode}
-        id={index.toString()}
+      <div key={index}
+      onClick={chooseEpisode}
+      id={index.toString()}>
+        <DescriptionTooltip
+        title={
+          <React.Fragment>
+            <Typography color="green">Description</Typography>
+            {item.description}
+          </React.Fragment>
+        }
+        placement="right"
       >
-        <div className="episode-title">{item.title}</div>
-        <div className="episode-number">Ep:{item.episode}</div>
-      </div>
+        <div className="episode wrapper">
+          <div className="episode-title">{item.title}</div>
+          <div className="episode-number">Ep:{item.episode}</div>
+        </div>
+      </DescriptionTooltip></div>
+      
     );
   });
+
 
   return (
     <>

@@ -14,6 +14,8 @@ interface ShowsProps {
 }
 
 
+//Very simple stuff hear just a component that displays the shows in the home page, but is mainly used in the carousel component
+
 export const formattedDate =(dateString:string|Date) =>{
   const date = new Date(dateString);
   const month = date.toLocaleString('default', { month: 'short' });
@@ -26,7 +28,8 @@ export const formattedDate =(dateString:string|Date) =>{
   export const Shows = (props: ShowsProps) => {
     const { item, handleClick } = props;
 
-    
+    //When the show is clicked, the id of the show is passed to the handleClick function which is used to open the player modal
+    //and gets the show's information based on the id passed
     return (
         <>
         <div className = "show" id={item.id} onClick={handleClick}>

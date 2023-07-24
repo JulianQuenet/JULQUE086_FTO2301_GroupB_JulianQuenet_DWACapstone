@@ -1,5 +1,6 @@
 import React from "react";
 import { formattedDate } from "./show";
+import { DominoSpinner } from "react-spinners-kit";
 import { Button, IconButton } from "@mui/material";
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 import SearchIcon from "@mui/icons-material/Search";
@@ -12,6 +13,7 @@ interface SearchProps {
   openGenre: (e: React.MouseEvent<HTMLDivElement>) => void;
 }
 
+//The genre is displayed in a button when the user clicks on the button the shows are filtered based on the genre
 const GENRES: { [key: number]: string } = {
   1: "Personal Growth",
   2: "True Crime and Investigative Journalism",
@@ -39,44 +41,62 @@ const Search = (props: SearchProps) => {
   const [submitted, setSubmitted] = React.useState<boolean>(false);
   const [invalid, setInvalid] = React.useState<boolean>(false);
   const [value, setValue] = React.useState<string>("Default");
+  const [isPending, startTransition] = React.useTransition()
 
+  /**
+   * @description Sets the local state to the list of shows retrieved form the api in the homepage component
+   */
   React.useEffect(() => {
     setSearchResult(filter);
     setDefaultResult(filter);
   }, [filter]);
 
+  /**
+   * Changes the value of the select element, sets the local state to the value of the search result if the filtered
+   * list return true, the search result is then sorted based on the value of the select element
+   * @param e :React.FormEvent<HTMLFormElement>
+   * @returns void
+   */
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSubmitted(false);
+    setValue("Default");
     const formData = new FormData(e.currentTarget);
     const data: { [key: string]: string } = {};
     formData.forEach((value, key) => {
       data[key] = String(value).toLowerCase();
     });
     if (data.searchOutput === "") {
-      setSearchResult(filter);
       setInvalid(true)
       setTimeout(() => {
         setInvalid(false)
       }, 2000);
       return;
-    }else{const result = filter.filter((item) => {
+    }else{
+      startTransition(()=>{
+      const result = filter.filter((item) => {
       return item.title.toLowerCase().includes(data.searchOutput);
     });
     setSearchResult(result);
     setDefaultResult(result);
-    setValue("Default");
     setSubmitted(true);
-    e.currentTarget.reset()
+    e.currentTarget.reset()}
+    )
   }
     
   };
 
+  /**
+   * Based on the value of the select element the search result is sorted and the local state is set to the sorted result
+   * the default result is used to reset the search result to the original list of shows or to the original list of shows 
+   * based on the search result 
+   * @param e :React.ChangeEvent<HTMLSelectElement>
+   */
   const sortBy = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
     let sortedResult: any[] = [];
     setValue(value);
-    switch (value) {
+      switch (value) {
       case "A-Z":
         sortedResult = [...searchResult].sort((a, b) =>
           a.title.localeCompare(b.title, undefined, { sensitivity: "base" })
@@ -102,8 +122,9 @@ const Search = (props: SearchProps) => {
       default:
         sortedResult = defaultResult;
     }
-
-    setSearchResult(sortedResult);
+    
+    startTransition(()=>{setSearchResult(sortedResult)}) //Creates a loading state essentially but only improves performance the larger the list of shows is
+    
   };
 
   const options = SORTING__OPTIONS.map((item, index) => {
@@ -123,6 +144,9 @@ const Search = (props: SearchProps) => {
     fontFamily: "Arial, Helvetica, sans-serif",
   };
 
+  /**
+   * @description maps over the search result and displays the relevant information for each show
+   */
   const podcastList = searchResult.map((item, index) => {
     return (
       <div key={index} className="search-result-item">
@@ -179,6 +203,8 @@ const Search = (props: SearchProps) => {
     width: "100%",
   };
 
+  //The search component is displayed in the home page, and acts as a search bar for the user to search for shows
+  //If is pending is true the loading spinner is displayed, if the user submits the form and the list of shows is empty, a message is displayed
   return (
     <> 
       <div style={{fontFamily:"arial", color:"Highlight", fontSize:"0.9rem", margin:"10px 0", textAlign:"center" }}>Discover new sounds</div>
@@ -199,15 +225,15 @@ const Search = (props: SearchProps) => {
         </form>
 
         <div className="filter">
-          <label htmlFor="filter">Sort by:</label>
-          <select onChange={sortBy} name="filter" value={value}>
+          <label htmlFor="filterBy">Sort by:</label>
+          <select onChange={sortBy} name="filterBy" value={value}>
             {options}
           </select>
         </div>
       </div>
       <div className="search-result">
-      {submitted && podcastList.length === 0 && <div style={noResultsStyle}>No results found</div>}
-      {podcastList && (podcastList)}
+      {isPending ? <div className="loading"><DominoSpinner size={100} color="#686769" loading={isPending} /></div> : podcastList && (podcastList)}
+      {!isPending && submitted && podcastList.length === 0 && <div style={noResultsStyle}>No results found</div>}
         </div>
     </>
   );

@@ -14,7 +14,7 @@ import { Pagination, Navigation } from "../../node_modules/swiper";
 import "swiper/css";
 import "swiper/css/pagination";
 
-export const GENRES: string[] = [
+export const GENRES: string[] = [ // List of genres to show the user
   "Entertainment",
   "Comedy",
   "True Crime and Investigative Journalism",
@@ -26,7 +26,7 @@ export const GENRES: string[] = [
   "Fiction",
 ];
 
-const images: { [key: number]: any } = {
+const images: { [key: number]: any } = { // Images to show the user for each genre based on the index of the genres array
   1: one,
   2: two,
   3: three,
@@ -45,10 +45,10 @@ interface genreProps {
 const Genres = (props: genreProps) => {
   const { toggle } = props;
 
-  const getStyles = (index: number) => {
+  const getStyles = (index: number) => {// Get the styles for each genre based on the index of the genres array and the images object
     const styles = GENRES.map((item, index) => {
       if (!item) return;
-      return {
+      return {//Returns the relevant background image for each genre
         background: `url(${images[index + 1]})`,
         backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
@@ -75,7 +75,7 @@ const Genres = (props: genreProps) => {
         key={index}
         className="genre"
         onClick={toggle}
-        id={genre}
+        id={genre}// Set the id of each slide to the genre name, in order to use it to filter the podcasts with the filtered modal
         style={getStyles(index)}
       >
         <div style={titleStyles}>{genre}</div>

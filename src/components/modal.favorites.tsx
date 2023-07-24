@@ -17,6 +17,7 @@ interface modalProps {
 }
 
 
+
 const FavoritesModal = (props: modalProps) => {
   const { toggle, open, user, handleClick } = props;
   const [favorites, setFavorites] = React.useState<any[]>([]);
@@ -25,6 +26,11 @@ const FavoritesModal = (props: modalProps) => {
   const [value, setValue] = React.useState<string>("Default");
 
 
+/**
+ * @description This is the function that gets the user's favorites from the database and sets the state based
+ * on the user's ID, the favorites are then sorted by the alphabetically by the title of the show and then chronologically
+ * by the season and episode number
+ */
   React.useEffect(() => {
     const getFavorites = async () => {
       try {
@@ -59,6 +65,12 @@ const FavoritesModal = (props: modalProps) => {
     textAlign: "left",
   };
 
+  /**
+   * When the delete button is clicked, this function is called and the user is prompted to confirm the deletion
+   * if yes the item is deleted from the database based on the episode id and the state is updated to reflect the change
+   * @param e : React.MouseEvent<HTMLButtonElement>
+   * @returns void
+   */
   const removeFavorite = async (e: React.MouseEvent<HTMLButtonElement>) => {
     const confirmation = window.confirm(
       "Are you sure you want to remove this from your favorites?"
@@ -83,6 +95,9 @@ const FavoritesModal = (props: modalProps) => {
     }
   };
 
+  /** 
+   * Maps over the data retrieved from the database and displays the information in a list
+  */
   const list = favReference.map((item, index) => {
     return (
       <div key={item.id} className="wrapper">
@@ -161,6 +176,12 @@ const FavoritesModal = (props: modalProps) => {
     );
   });
 
+
+  /**
+   * @description This function is called when the user selects an option from the dropdown menu, on the change
+   * of the select element, the value is set to the value of the selected option and the favorites are sorted based
+   * on the value, if default is selected the favorites are set to the original state
+   */
   const sortBy = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const valueSelect = e.target.value;
     let sortedResult: any[] = [];
@@ -195,7 +216,7 @@ const FavoritesModal = (props: modalProps) => {
   }
  
 
-  return (
+  return (//The modal that displays the user's favorites, if the user has no favorites a message is displayed
     <>  
         <div className="backdrop"></div>
         <dialog open={open} className="modal">
