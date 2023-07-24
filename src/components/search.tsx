@@ -221,6 +221,7 @@ const Search = (props: SearchProps) => {
             <SearchIcon/>
           </IconButton>
           <IconButton onClick={()=>{setSearchResult(filter)
+          setDefaultResult(filter)
           setValue("Default")}} color="info" size="small">All</IconButton>
         </form>
 
