@@ -153,7 +153,7 @@ const Homepage = (props: homePageProps) => {
   //Except for the settings modal and filtered modal as the don't make any calls to the database
   return (
     <>
-      {loading && (
+    {user && <>{loading && (
         <div className="loading" style={loadingStyles}>
           <WaveSpinner size={30} color="#fff" loading={loading} />
         </div>
@@ -217,7 +217,8 @@ const Homepage = (props: homePageProps) => {
 
           <Footer />
         </section>
-      )}
+      )}</>}
+      
     </>
   );
 };
