@@ -14,15 +14,13 @@ import {
 import Typography from "@mui/material/Typography";
 import { HISTORY } from "./modal.watched";
 import { FlagSpinner } from "react-spinners-kit";
-import supabase from "../../supabaseClient";
+import supabase from "../../client/supabaseClient";
 import CloseIcon from "@mui/icons-material/Close";
-
-
 
 /**
  * This is the main modal component, it is used to display the episodes of a show, it is accessible from the home page
  * where ever a show is displayed.
- * 
+ *
  */
 
 export const INDEX: { [key: string]: number } = {
@@ -61,7 +59,7 @@ const Modal = (props: cardProps) => {
   const [image, setImage] = React.useState<string>("");
   const [index, setIndex] = React.useState<number>(0);
   const [episodeIndex, setEpisodeIndex] = React.useState<number>(0);
-  const [open, setOpen] = React.useState<boolean>(false);//used for the tooltip
+  const [open, setOpen] = React.useState<boolean>(false); //used for the tooltip
   const [favorites, setFavorites] = React.useState<episodeProps[]>([]);
   const [isPlaying, setIsPlaying] = React.useState<boolean>(false);
   const [loading, setLoading] = React.useState<boolean>(false);
@@ -70,10 +68,10 @@ const Modal = (props: cardProps) => {
   const [TIMESTAMPS, setTIMESTAMPS] = React.useState<episodeProps[]>([]);
   const audioRef = useRef<AudioPlayer>(null);
 
-/**
- * @description This is the function that gets the show's data from the api and sets the state based on the
- * response, it also sets the season index and episode index based on the INDEX object, as well as the show's data
- */
+  /**
+   * @description This is the function that gets the show's data from the api and sets the state based on the
+   * response, it also sets the season index and episode index based on the INDEX object, as well as the show's data
+   */
   React.useEffect(() => {
     const URL: String = `https://podcast-api.netlify.app/id/${path}`;
     const getCard = async () => {
@@ -192,9 +190,9 @@ const Modal = (props: cardProps) => {
     setOpen(!open);
   };
 
-  /** 
+  /**
    * @description This is the function that creates a custom tooltip component used to house the description of the episode
-  */
+   */
   const DescriptionTooltip = styled(({ className, ...props }: TooltipProps) => (
     <Tooltip {...props} classes={{ popper: className }} />
   ))(({ theme }) => ({
@@ -208,10 +206,9 @@ const Modal = (props: cardProps) => {
     },
   }));
 
-
   /**
    * @description This is the function that adds/removes the episode from the user's favorites, if the episode is already
-   * in the user's favorites, it is removed, if not, it is added and sets the relevant data to be added to the database 
+   * in the user's favorites, it is removed, if not, it is added and sets the relevant data to be added to the database
    * in order to display correctly in the fav0rites section
    */
   const addToFavorites = async () => {
@@ -292,7 +289,7 @@ const Modal = (props: cardProps) => {
   });
 
   /**
-   * @description This is the function that sets the current time of the audio player to the time stamp of the episode if 
+   * @description This is the function that sets the current time of the audio player to the time stamp of the episode if
    * the episode is in the user's timestamps, if not, it sets the current time to 0
    */
   const handleLoad = () => {
@@ -442,11 +439,11 @@ const Modal = (props: cardProps) => {
     setEpisodeIndex((prev) => prev - 1);
   };
 
-  /** 
+  /**
    * @description This is the function that adds/removes the episode from the user's completed history, if the episode is already
    * in the user's completed history, it is removed and re-added to the front if not, it is added and sets the relevant data to be added to the database
    * which will be used to display the episode in the completed history section
-  */
+   */
   const handleEnded = async () => {
     const selectedEpisode = episodes[episodeIndex];
     selectedEpisode.timeStamp = 0;
@@ -553,35 +550,31 @@ const Modal = (props: cardProps) => {
         />
       </div>
     );
-  })[episodeIndex] // Only the current episode is displayed, will only map over the current episode
-
+  })[episodeIndex]; // Only the current episode is displayed, will only map over the current episode
 
   /**
    * maps over the episodes and creates a list of episodes which can be clicked on to change the episode
    */
   const episodeList = episodes.map((item, index) => {
     return (
-      <div key={index}
-      onClick={chooseEpisode}
-      id={index.toString()}>
+      <div key={index} onClick={chooseEpisode} id={index.toString()}>
         <DescriptionTooltip
-        title={
-          <React.Fragment>
-            <Typography color="green">Description</Typography>
-            {item.description}
-          </React.Fragment>
-        }
-        placement="right"
-      >
-        <div className="episode wrapper">
-          <div className="episode-title">{item.title}</div>
-          <div className="episode-number">Ep:{item.episode}</div>
-        </div>
-      </DescriptionTooltip></div>
-      
+          title={
+            <React.Fragment>
+              <Typography color="green">Description</Typography>
+              {item.description}
+            </React.Fragment>
+          }
+          placement="right"
+        >
+          <div className="episode wrapper">
+            <div className="episode-title">{item.title}</div>
+            <div className="episode-number">Ep:{item.episode}</div>
+          </div>
+        </DescriptionTooltip>
+      </div>
     );
   });
-
 
   return (
     <>

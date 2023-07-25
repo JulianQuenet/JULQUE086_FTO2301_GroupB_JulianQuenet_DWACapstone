@@ -1,8 +1,6 @@
 import React from "react";
-import supabase from "../../supabaseClient";
+import supabase from "../../client/supabaseClient";
 import { useNavigate } from "react-router-dom";
-
-
 
 interface LandingProps {
   setUser: any;
@@ -13,7 +11,8 @@ const Landing = (props: LandingProps) => {
   const [newUser, setNewUser] = React.useState<boolean>(true);
   const navigate = useNavigate(); // Navigate to the homepage after login
 
-  const signUp = (e: React.FormEvent<HTMLFormElement>) => {//Sign up function and logic, connects to supabase to create account and checks for errors
+  const signUp = (e: React.FormEvent<HTMLFormElement>) => {
+    //Sign up function and logic, connects to supabase to create account and checks for errors
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
@@ -54,13 +53,14 @@ const Landing = (props: LandingProps) => {
     alert("Check your email for a confirmation link");
   };
 
-  const signIn = (e: React.FormEvent<HTMLFormElement>) => {//Sign in function and logic, connects to supabase and checks for errors
+  const signIn = (e: React.FormEvent<HTMLFormElement>) => {
+    //Sign in function and logic, connects to supabase and checks for errors
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
     const data: { [key: string]: string } = {};
     formData.forEach((value, key) => {
-      if (value === "" || value === null)return;
+      if (value === "" || value === null) return;
       data[key] = String(value);
     });
 

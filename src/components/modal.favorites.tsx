@@ -1,5 +1,5 @@
 import React from "react";
-import supabase from "../../supabaseClient";
+import supabase from "../../client/supabaseClient";
 import { FlagSpinner } from "react-spinners-kit";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { IconButton } from "@mui/material";
@@ -8,15 +8,12 @@ import CloseIcon from "@mui/icons-material/Close";
 import { SORTING__OPTIONS } from "./search";
 import { formattedDate } from "./show";
 
-
 interface modalProps {
   toggle: () => void;
   open: boolean;
   user: any;
   handleClick: (e: React.MouseEvent<HTMLDivElement>) => void;
 }
-
-
 
 const FavoritesModal = (props: modalProps) => {
   const { toggle, open, user, handleClick } = props;
@@ -25,12 +22,11 @@ const FavoritesModal = (props: modalProps) => {
   const [loading, setLoading] = React.useState<boolean>(false);
   const [value, setValue] = React.useState<string>("Default");
 
-
-/**
- * @description This is the function that gets the user's favorites from the database and sets the state based
- * on the user's ID, the favorites are then sorted by the alphabetically by the title of the show and then chronologically
- * by the season and episode number
- */
+  /**
+   * @description This is the function that gets the user's favorites from the database and sets the state based
+   * on the user's ID, the favorites are then sorted by the alphabetically by the title of the show and then chronologically
+   * by the season and episode number
+   */
   React.useEffect(() => {
     const getFavorites = async () => {
       try {
@@ -39,13 +35,14 @@ const FavoritesModal = (props: modalProps) => {
           .from("User favorites")
           .select("*")
           .eq("user_id", user.user.id)
-          .order('showTitle', { ascending: true })
-          .order('season', { ascending: true })
-          .order('episode', { ascending: true });
+          .order("showTitle", { ascending: true })
+          .order("season", { ascending: true })
+          .order("episode", { ascending: true });
 
-        if (data) {setFavorites(data)
-        setFavReference(data)
-      }
+        if (data) {
+          setFavorites(data);
+          setFavReference(data);
+        }
         if (error) throw error;
       } catch (error) {
         alert("Something went wrong please refresh the page");
@@ -79,25 +76,26 @@ const FavoritesModal = (props: modalProps) => {
     const index = e.currentTarget.dataset.index;
     const id = e.currentTarget.id;
     try {
-        const { error } = await supabase
-            .from("User favorites")
-            .delete()
-            .eq("id", id);
-        if (error) throw error;
-        const newFavorites = favorites.filter((item, i) => {
-          if(!item)return
-          return i !== Number(index)});
-        setFavorites(newFavorites);
-        setFavReference(newFavorites);
-        setValue("Default");
+      const { error } = await supabase
+        .from("User favorites")
+        .delete()
+        .eq("id", id);
+      if (error) throw error;
+      const newFavorites = favorites.filter((item, i) => {
+        if (!item) return;
+        return i !== Number(index);
+      });
+      setFavorites(newFavorites);
+      setFavReference(newFavorites);
+      setValue("Default");
     } catch (error) {
-        alert("Something went wrong please refresh the page")
+      alert("Something went wrong please refresh the page");
     }
   };
 
-  /** 
+  /**
    * Maps over the data retrieved from the database and displays the information in a list
-  */
+   */
   const list = favReference.map((item, index) => {
     return (
       <div key={item.id} className="wrapper">
@@ -109,13 +107,21 @@ const FavoritesModal = (props: modalProps) => {
             justifyContent: "space-between",
           }}
         >
-          <div id={item.episode_id}
-               data-season={item.season}
-               data-episode={item.episode}
-               onClick={handleClick} style={{ display: "flex", gap: "0.5rem", alignItems: "center", width:"100%" }}>
+          <div
+            id={item.episode_id}
+            data-season={item.season}
+            data-episode={item.episode}
+            onClick={handleClick}
+            style={{
+              display: "flex",
+              gap: "0.5rem",
+              alignItems: "center",
+              width: "100%",
+            }}
+          >
             <img src={item.image} className="list-image favorites" />
             <div>
-            <p className="list-title" style={{ color: "lightslategray" }}>
+              <p className="list-title" style={{ color: "lightslategray" }}>
                 {item.title}
               </p>
               <div style={miniInfoStyles}>
@@ -126,8 +132,8 @@ const FavoritesModal = (props: modalProps) => {
                   <p className="list-episode">Episode: {item.episode}</p>
                 </div>
                 <h4 style={{ fontWeight: "350", fontFamily: "monospace" }}>
-                Show: {item.showTitle}
-              </h4>
+                  Show: {item.showTitle}
+                </h4>
                 <div
                   style={{
                     color: "gray",
@@ -141,7 +147,13 @@ const FavoritesModal = (props: modalProps) => {
             </div>
           </div>
           <Tooltip title="Remove from favorites" placement="top-end">
-            <IconButton style={{zIndex:"55"}} color="error" id={item.id} data-index={index} onClick={removeFavorite}>
+            <IconButton
+              style={{ zIndex: "55" }}
+              color="error"
+              id={item.id}
+              data-index={index}
+              onClick={removeFavorite}
+            >
               <DeleteOutlineIcon />
             </IconButton>
           </Tooltip>
@@ -175,7 +187,6 @@ const FavoritesModal = (props: modalProps) => {
       </option>
     );
   });
-
 
   /**
    * @description This function is called when the user selects an option from the dropdown menu, on the change
@@ -213,13 +224,13 @@ const FavoritesModal = (props: modalProps) => {
         sortedResult = favorites;
     }
     setFavReference(sortedResult);
-  }
- 
+  };
 
-  return (//The modal that displays the user's favorites, if the user has no favorites a message is displayed
-    <>  
-        <div className="backdrop"></div>
-        <dialog open={open} className="modal">
+  return (
+    //The modal that displays the user's favorites, if the user has no favorites a message is displayed
+    <>
+      <div className="backdrop"></div>
+      <dialog open={open} className="modal">
         {loading && (
           <div className="loading">
             <FlagSpinner size={40} color="#fff" loading={loading} />
@@ -228,19 +239,29 @@ const FavoritesModal = (props: modalProps) => {
         {!loading && (
           <div style={{ height: "100%", width: "100%" }}>
             <div className="inputs">
-              <IconButton onClick={toggle} color="info"><CloseIcon/></IconButton>
+              <IconButton onClick={toggle} color="info">
+                <CloseIcon />
+              </IconButton>
             </div>
             <div className="card-display">
               {user.user.user_metadata.full_name}'s favorites
             </div>
-              <label style={{marginLeft:"10px"}} htmlFor="sort">Sort by:</label>
-            <select className="sort" onChange={sortBy} value={value} name="sort">{options}</select>
-            
+            <label style={{ marginLeft: "10px" }} htmlFor="sort">
+              Sort by:
+            </label>
+            <select
+              className="sort"
+              onChange={sortBy}
+              value={value}
+              name="sort"
+            >
+              {options}
+            </select>
+
             {empty ? <Message /> : <div className="list favorite">{list}</div>}
           </div>
         )}
       </dialog>
-      
     </>
   );
 };

@@ -1,5 +1,5 @@
 import React from "react";
-import supabase from "../../supabaseClient";
+import supabase from "../../client/supabaseClient";
 import { formattedDate } from "./show";
 import CloseIcon from "@mui/icons-material/Close";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -30,7 +30,8 @@ interface HistoryType {
   COMPLETED: episodeProps[];
 }
 
-export const HISTORY: HistoryType = {//Used to communicate between the watched modal and the show component
+export const HISTORY: HistoryType = {
+  //Used to communicate between the watched modal and the show component
   WATCHLIST: [],
   COMPLETED: [],
 };
@@ -97,13 +98,14 @@ const WatchedModal = (props: WatchedProps) => {
     setCompleted(HISTORY.COMPLETED);
   }, [HISTORY.WATCHLIST, HISTORY.COMPLETED]);
 
-
   /**
    * @description This is the function that clears the user's history, it deletes all the user's history from the database
    * and then reloads the page, only if confirmation is given by the user
    */
   const clearHistoryHandler = async () => {
-    const confirmation = window.confirm("This action will clear your history, are you sure you wish to continue?");
+    const confirmation = window.confirm(
+      "This action will clear your history, are you sure you wish to continue?"
+    );
     if (confirmation) {
       try {
         setLoading(true);
@@ -134,7 +136,7 @@ const WatchedModal = (props: WatchedProps) => {
         if (error) throw error;
       } catch (error) {
         alert("something went wrong, please refresh the page");
-      }finally{
+      } finally {
         setLoading(false);
         HISTORY.WATCHLIST = [];
         HISTORY.COMPLETED = [];
@@ -241,9 +243,9 @@ const WatchedModal = (props: WatchedProps) => {
               Viewed
               <Tooltip title="Clear History">
                 <IconButton color="error" onClick={clearHistoryHandler}>
-                <DeleteIcon />
-              </IconButton></Tooltip>
-              
+                  <DeleteIcon />
+                </IconButton>
+              </Tooltip>
             </div>
             <div className="watched">
               {watchedList.length === 0 ? <Message /> : watchedList}

@@ -1,5 +1,5 @@
 import React from "react";
-import supabase from "../../supabaseClient";
+import supabase from "../../client/supabaseClient";
 import { DominoSpinner } from "react-spinners-kit";
 import { IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
@@ -10,12 +10,11 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import TextField from "@mui/material/TextField";
 import Alert from "@mui/material/Alert";
 
-
-// Compare this snippet from src\components\modal.favorites.tsx, all the same except the delete Icon is removed 
+// Compare this snippet from src\components\modal.favorites.tsx, all the same except the delete Icon is removed
 //and when the exit button is clicked the user is routed to the login section
 
 const FavoritesShared = () => {
-  const [favorites, setFavorites] = React.useState<any[]>([]); 
+  const [favorites, setFavorites] = React.useState<any[]>([]);
   const [favReference, setFavReference] = React.useState<any[]>([]);
   const [loading, setLoading] = React.useState<boolean>(false);
   const [invalid, setInvalid] = React.useState<boolean>(false);
@@ -34,7 +33,12 @@ const FavoritesShared = () => {
 
   const list = favReference.map((item, index) => {
     return (
-      <div data-use-index={index} key={item.id} className="wrapper" style={{cursor:"default"}}>
+      <div
+        data-use-index={index}
+        key={item.id}
+        className="wrapper"
+        style={{ cursor: "default" }}
+      >
         <div
           className="list-info"
           style={{
@@ -65,8 +69,8 @@ const FavoritesShared = () => {
                   <p className="list-episode">Episode: {item.episode}</p>
                 </div>
                 <h4 style={{ fontWeight: "350", fontFamily: "monospace" }}>
-                Show: {item.showTitle}
-              </h4>
+                  Show: {item.showTitle}
+                </h4>
                 <div
                   style={{
                     color: "gray",
@@ -234,7 +238,9 @@ const FavoritesShared = () => {
                 </IconButton>
               </div>
               <div className="card-display">Favorite episodes</div>
-              <label style={{marginLeft:"10px"}} htmlFor="sort">Sort by:</label>
+              <label style={{ marginLeft: "10px" }} htmlFor="sort">
+                Sort by:
+              </label>
               <select
                 className="sort"
                 onChange={sortBy}
