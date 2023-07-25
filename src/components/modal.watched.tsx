@@ -1,5 +1,5 @@
 import React from "react";
-import supabase from "../../client/supabaseClient";
+import supabase from "../../supabaseClient";
 import { formattedDate } from "./show";
 import CloseIcon from "@mui/icons-material/Close";
 import DeleteIcon from "@mui/icons-material/Delete";

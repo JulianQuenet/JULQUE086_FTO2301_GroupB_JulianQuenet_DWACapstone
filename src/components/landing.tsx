@@ -1,5 +1,5 @@
 import React from "react";
-import supabase from "../../client/supabaseClient";
+import supabase from "../../supabaseClient";
 import { useNavigate } from "react-router-dom";
 
 interface LandingProps {

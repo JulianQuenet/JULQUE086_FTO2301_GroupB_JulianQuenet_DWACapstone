@@ -1,5 +1,5 @@
 import React from "react";
-import supabase from "../../client/supabaseClient";
+import supabase from "../../supabaseClient";
 import { DominoSpinner } from "react-spinners-kit";
 import { IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";

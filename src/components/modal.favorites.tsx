@@ -1,5 +1,5 @@
 import React from "react";
-import supabase from "../../client/supabaseClient";
+import supabase from "../../supabaseClient";
 import { FlagSpinner } from "react-spinners-kit";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { IconButton } from "@mui/material";

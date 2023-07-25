@@ -9,7 +9,7 @@ lerna-debug.log*
 
 
 node_modules
-client
+supabaseClient.ts
 dist
 dist-ssr
 *.local

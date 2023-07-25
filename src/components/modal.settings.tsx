@@ -3,7 +3,7 @@ import IconButton from "@mui/material/IconButton/IconButton";
 import Button from "@mui/material/Button/Button";
 import WarningAmberIcon from "@mui/icons-material/WarningAmber";
 import CloseIcon from "@mui/icons-material/Close";
-import supabase from "../../client/supabaseClient";
+import supabase from "../../supabaseClient";
 import { useNavigate } from "react-router-dom";
 
 interface modalProps {

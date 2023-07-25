@@ -14,7 +14,7 @@ import {
 import Typography from "@mui/material/Typography";
 import { HISTORY } from "./modal.watched";
 import { FlagSpinner } from "react-spinners-kit";
-import supabase from "../../client/supabaseClient";
+import supabase from "../../supabaseClient";
 import CloseIcon from "@mui/icons-material/Close";
 
 /**
