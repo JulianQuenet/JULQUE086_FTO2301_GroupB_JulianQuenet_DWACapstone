@@ -12,20 +12,17 @@ import Footer from "./components/footer";
 import SettingsModal from "./components/modal.settings";
 import { INDEX } from "./components/modal";
 import { WaveSpinner } from "react-spinners-kit";
+import { useNavigate } from "react-router-dom";
 import "./index.css";
 
 const URL: String = "https://podcast-api.netlify.app/shows";
-
-interface homePageProps {
-  user: any;
-}
 
 /**The main functional component for the application, it contains the state for the modal, the filtered modal, the favorites modal and
 for the history modal, in terms of whether they are open or closed, also houses most of the onCLick events for the application
 and does the main api call to pass down the data to the necessary child components
 */
 
-const Homepage = (props: homePageProps) => {
+const Homepage = () => {
   const [list, setList] = React.useState<any[]>([]);
   const [on, setOn] = React.useState<boolean>(false);
   const [id, setId] = React.useState<string>("");
@@ -35,8 +32,9 @@ const Homepage = (props: homePageProps) => {
   const [showViewed, setShowViewed] = React.useState<boolean>(false);
   const [genre, setGenre] = React.useState<string>("");
   const [loading, setLoading] = React.useState<boolean>(false);
-  const { user } = props;
+  const [user, setUser] = React.useState<any>(null);
 
+const navigate = useNavigate();//Will be used to navigate to the login page if the user is not logged in
   /**
    * @description This is the main api call for the application, it gets the data from the api and sets the state
    * based on the data retrieved, it also sets the title of the show at index 12 to the correct title
@@ -52,10 +50,15 @@ const Homepage = (props: homePageProps) => {
         if (!res) {
           throw new Error(`${res} returned null`);
         }
+        const userOld = sessionStorage.getItem("user");
+    if (userOld) {
+      setUser(JSON.parse(userOld));
+    }
       } catch (error) {
         alert(error);
       } finally {
-        setTimeout(() => {//Fake loading time as the api call is very fast
+        setTimeout(() => {
+          //Fake loading time as the api call is very fast
           setLoading(false);
         }, 1000);
       }
@@ -64,7 +67,7 @@ const Homepage = (props: homePageProps) => {
   }, []);
 
   /**
-   * If the show is clicked the modal player is opened with the relevant data based on the id, the index is also 
+   * If the show is clicked the modal player is opened with the relevant data based on the id, the index is also
    * used if the data sets are available in order to set the player to the correct episode and season, this only comes
    * into play in the favorites modal and history modal
    * @param e :React.MouseEvent<HTMLDivElement>
@@ -130,7 +133,8 @@ const Homepage = (props: homePageProps) => {
     return <Shows key={item.id} item={item} handleClick={handleClick} />;
   });
 
-  if (on) {//If any of the modals are open the body is set to overflow hidden to prevent scrolling, except for the settings modal
+  if (on) {
+    //If any of the modals are open the body is set to overflow hidden to prevent scrolling, except for the settings modal
     document.body.style.overflowY = "hidden";
   } else if (filtered) {
     document.body.style.overflowY = "hidden";
@@ -148,77 +152,84 @@ const Homepage = (props: homePageProps) => {
     alignItems: "center",
   };
 
+  const {protocol, host} = window.location
 
   //All components are rendered here, the loading spinner is rendered if the loading state is true and all the modals are rendered conditionally
   //Except for the settings modal and filtered modal as the don't make any calls to the database
   return (
     <>
-    {user && <>{loading && (
-        <div className="loading" style={loadingStyles}>
-          <WaveSpinner size={30} color="#fff" loading={loading} />
-        </div>
+      {user && (
+        <>
+          {loading && (
+            <div className="loading" style={loadingStyles}>
+              <WaveSpinner size={30} color="#fff" loading={loading} />
+            </div>
+          )}
+          {!loading && (
+            <section>
+              <section className="hero">
+                <Header user={user} toggle={toggleSettings} />
+                <Search
+                  openGenre={handleFiltered}
+                  filter={list}
+                  handleClick={handleClick}
+                />
+              </section>
+
+              {on && (
+                <Modal
+                  on={on}
+                  toggle={toggleOn}
+                  path={id}
+                  shows={list}
+                  user={user}
+                />
+              )}
+
+              <FilteredModal
+                name={genre}
+                open={filtered}
+                toggle={toggleFiltered}
+                handleClick={handleClick}
+                shows={list}
+              />
+              <SettingsModal
+                toggle={toggleSettings}
+                open={showSettings}
+                user={user}
+                toggleFavorites={toggleFavorites}
+                toggleViewed={toggleViewed}
+              />
+              {showFavorites && (
+                <FavoritesModal
+                  toggle={toggleFavorites}
+                  open={showFavorites}
+                  user={user}
+                  handleClick={handleClick}
+                />
+              )}
+
+              {showViewed && (
+                <WatchedModal
+                  handleClick={handleClick}
+                  toggle={toggleViewed}
+                  open={showViewed}
+                  user={user}
+                />
+              )}
+              <div className="lowerMain">
+                <Carousel items={lists} />
+                <Genres toggle={handleFiltered} />
+              </div>
+
+              <Footer />
+            </section>
+          )}
+        </>
       )}
-      {!loading && (
-        <section>
-          <section className="hero">
-            <Header user={user} toggle={toggleSettings} />
-            <Search
-              openGenre={handleFiltered}
-              filter={list}
-              handleClick={handleClick}
-            />
-          </section>
-
-          {on && (
-            <Modal
-              on={on}
-              toggle={toggleOn}
-              path={id}
-              shows={list}
-              user={user}
-            />
-          )}
-
-          <FilteredModal
-            name={genre}
-            open={filtered}
-            toggle={toggleFiltered}
-            handleClick={handleClick}
-            shows={list}
-          />
-          <SettingsModal
-            toggle={toggleSettings}
-            open={showSettings}
-            user={user}
-            toggleFavorites={toggleFavorites}
-            toggleViewed={toggleViewed}
-          />
-          {showFavorites && (
-            <FavoritesModal
-              toggle={toggleFavorites}
-              open={showFavorites}
-              user={user}
-              handleClick={handleClick}
-            />
-          )}
-
-          {showViewed && (
-            <WatchedModal
-              handleClick={handleClick}
-              toggle={toggleViewed}
-              open={showViewed}
-              user={user}
-            />
-          )}
-          <div className="lowerMain">
-            <Carousel items={lists} />
-            <Genres toggle={handleFiltered} />
-          </div>
-
-          <Footer />
-        </section>
-      )}</>}
-      
+      {!user && (<div className="loading" style={{width:"300px", height:"100vh", textAlign:"center", margin:"0 auto"}}>Fetching some data, if you still see this page after
+      a few minutes please return to the login section
+      <button className="user-button" onClick={()=>navigate("/")}>{protocol}//{host}</button></div>)}
     </>
   );
 };

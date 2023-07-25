@@ -12,23 +12,25 @@ import "./form.css";
 const App = () => {
    const [user, setUser] = React.useState<any>(null);
 
-   if(user){
-    sessionStorage.setItem('user', JSON.stringify(user));
-   }
-
    React.useEffect(() => {
-    const user = sessionStorage.getItem('user');
-    if(user){
-      setUser(JSON.parse(user));
+    const userOld = sessionStorage.getItem('user');
+    if(userOld){
+      setUser(JSON.parse(userOld));
     }
    }, []);
+
+   React.useEffect(()=>{
+    if(user){
+      sessionStorage.setItem('user', JSON.stringify(user))
+    }
+   }, [user])
    
 
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Landing setUser={setUser}/>} />
-        <Route path="/homepage" element={<Homepage user={user}/>} />
+        <Route path="/*" element={<Landing setUser={setUser}/>} />
+        <Route path="/homepage" element={<Homepage/>} />
         <Route path="/favorites" element={<FavoritesShared />} />
       </Routes>
     </BrowserRouter>
