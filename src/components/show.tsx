@@ -33,7 +33,7 @@ export const formattedDate =(dateString:string|Date) =>{
     return (
         <>
         <div className = "show" id={item.id} onClick={handleClick}>
-        <img src={item.image}  className="show-image"/>
+        <img srcSet={item.image}  className="show-image"/>
         <div className="show-info">
           <p className="show-title">{item.title}</p>
           <div className="show-season">Seasons: {item.seasons}</div>

@@ -12,7 +12,7 @@ const footerStyles: React.CSSProperties = {
   marginTop: "4rem",
   fontFamily: "system-ui",
   color: "darkOrange",
-  fontSize: "0.68rem",
+  fontSize: "0.65rem",
   padding: "20px",
   boxShadow:
     "0 0 7.55px rgba(0, 0, 0, 0.65), 0 0 10px rgba(0, 0, 0, 0.35), 0 0 15px rgba(0, 0, 0, 0.15)",
@@ -31,11 +31,11 @@ const linkStyles: React.CSSProperties = {
 };
 
 const infoStyles: React.CSSProperties = {
-  maxWidth: "600px",
   display: "flex",
   alignItems: "center",
   gap: "3px",
   textAlign: "center",
+  margin:"0"
 };
 
 const Footer = () => {

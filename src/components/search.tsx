@@ -153,7 +153,8 @@ const Search = (props: SearchProps) => {
         <div className="item-content">
           <div className="item-preface" style={{ paddingBottom: "10px" }}>
             <img
-              src={item.image}
+              loading="lazy"
+              srcSet={item.image}
               alt={item.title}
               style={{ display: "block", margin: "0 auto", width: "100%" }}
             />
