@@ -222,11 +222,12 @@
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
   outline: none;
   margin-bottom: 2px;
+  color: #ffb500;
   }
 
   option{
     background-color: rgba(66, 66, 66);
-    color: blanchedalmond;
+    color: #ffb500;
   }
 
   select:hover{

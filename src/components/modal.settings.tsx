@@ -117,7 +117,7 @@ const SettingsModal = (props: modalProps) => {
     <>
       <dialog open={open} className="settings-modal">
         <div className="settings-header" style={settingsHeaderStyles}>
-          <div style={{ margin: "5px" }}>Settings menu</div>
+          <div style={{color:"white"}}>Settings menu</div>
           <IconButton color="info" onClick={toggle}>
             <CloseIcon color="info" />
           </IconButton>
@@ -134,7 +134,7 @@ const SettingsModal = (props: modalProps) => {
               Sign out
             </button>
             <div className="settings-info">
-              <p>
+              <p style={{color:"white"}}>
                 You can share your favorites with your friends via the link
                 below provided they have this code:
               </p>

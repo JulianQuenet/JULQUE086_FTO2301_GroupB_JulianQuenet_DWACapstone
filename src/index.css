@@ -101,7 +101,6 @@ body {
   transition: all 0.1s ease-in-out;
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
   margin-top: 0.5rem;
-  color: blanchedalmond;
 }
 
 .user-button:hover {
@@ -255,7 +254,7 @@ img {
   text-align: center;
   font-size: 0.9rem;
   backdrop-filter: blur(4.5px);
-
+  color: white;
 }
 
 .updated {

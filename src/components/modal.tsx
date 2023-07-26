@@ -138,7 +138,7 @@ const Modal = (props: cardProps) => {
   const options = seasons.map((item, index) => {
     if (!item) return;
     return (
-      <option key={index} value={index}>
+      <option  key={index} value={index}>
         Season {index + 1}
       </option>
     );
@@ -530,9 +530,9 @@ const Modal = (props: cardProps) => {
             />
           )}
         </div>
-        <div className="card-episode">Episode {index + 1}</div>
+        <div className="card-episode" style={{color:"white"}}>Episode {index + 1}</div>
         <img style={{ margin: "0 auto" }} src={image} width={100} />
-        <div className="card-title">{item.title}</div>
+        <div className="card-title" style={{color:"white"}}>{item.title}</div>
         <AudioPlayer
           ref={audioRef}
           onListen={handleTime}
