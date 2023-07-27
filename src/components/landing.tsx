@@ -78,7 +78,7 @@ const Landing = (props: LandingProps) => {
         setUser(data);
         navigate("/homepage");
       } catch (error) {
-        alert("Something went wrong, please try again");
+        alert(`${error} or Something went wrong, please try again`);
       }
     };
 
