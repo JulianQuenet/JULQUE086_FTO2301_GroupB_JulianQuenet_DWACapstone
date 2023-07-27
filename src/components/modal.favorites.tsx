@@ -131,7 +131,7 @@ const FavoritesModal = (props: modalProps) => {
                   <div className="list-season">Season: {item.season}</div>
                   <p className="list-episode">Episode: {item.episode}</p>
                 </div>
-                <h4 style={{ fontWeight: "350", fontFamily: "monospace" }}>
+                <h4 style={{ fontWeight: "350", fontFamily: "monospace", color:"white" }}>
                   Show: {item.showTitle}
                 </h4>
                 <div
@@ -246,7 +246,7 @@ const FavoritesModal = (props: modalProps) => {
             <div className="card-display">
               {user.user.user_metadata.full_name}'s favorites
             </div>
-            <label style={{ marginLeft: "10px" }} htmlFor="sort">
+            <label style={{ marginLeft: "10px", color:"white" }} htmlFor="sort">
               Sort by:
             </label>
             <select

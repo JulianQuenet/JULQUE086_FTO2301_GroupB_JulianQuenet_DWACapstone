@@ -238,6 +238,7 @@ const WatchedModal = (props: WatchedProps) => {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
+                color:"white"
               }}
             >
               Viewed
@@ -250,7 +251,7 @@ const WatchedModal = (props: WatchedProps) => {
             <div className="watched">
               {watchedList.length === 0 ? <Message /> : watchedList}
             </div>
-            <div style={{ width: "95%", margin: "0 auto" }}>Completed</div>
+            <div style={{ width: "95%", margin: "0 auto", color:"white" }}>Completed</div>
             <div className="watched completed">
               {completedList.length === 0 ? <Message /> : completedList}
             </div>
