@@ -6,13 +6,28 @@ import { IconButton } from "@mui/material";
 import Tooltip from "@mui/material/Tooltip";
 import CloseIcon from "@mui/icons-material/Close";
 import { SORTING__OPTIONS } from "./search";
-import { formattedDate } from "./show";
 
 interface modalProps {
   toggle: () => void;
   open: boolean;
   user: any;
   handleClick: (e: React.MouseEvent<HTMLDivElement>) => void;
+}
+
+/**
+ * @description This function takes a date string or date object and returns a formatted string into 
+ * the day month year and time the item was added to favorites
+ * @param dateString : string|Date
+ * @returns : string
+ */
+const getAddedTime = (dateString:string|Date) =>{
+ 
+  const date = new Date(dateString);
+  const month = date.toLocaleString('default', { month: 'short' });
+  const year = date.getFullYear();
+  const time = date.toLocaleTimeString('en-US', { hour12: true, hour: "numeric", minute: "numeric" });
+
+  return `${year} ${month}(${date.getDate()}) ${time}`;
 }
 
 const FavoritesModal = (props: modalProps) => {
@@ -141,7 +156,7 @@ const FavoritesModal = (props: modalProps) => {
                     fontFamily: "monospace",
                   }}
                 >
-                  Added:{formattedDate(item.created_at)}
+                  Added:{getAddedTime(item.created_at)}
                 </div>
               </div>
             </div>
