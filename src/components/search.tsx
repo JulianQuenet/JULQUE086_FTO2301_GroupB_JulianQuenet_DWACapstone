@@ -6,6 +6,7 @@ import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 import SearchIcon from "@mui/icons-material/Search";
 import TextField from '@mui/material/TextField';
 import Alert from '@mui/material/Alert';
+import Fuse from "fuse.js";
 
 interface SearchProps {
   filter: any[];
@@ -43,6 +44,17 @@ const Search = (props: SearchProps) => {
   const [value, setValue] = React.useState<string>("Default");
   const [isPending, startTransition] = React.useTransition()
 
+  const fuseOptions: Fuse.IFuseOptions<any> = {
+    minMatchCharLength: 1,
+    threshold: 0.15,
+    keys: [
+      "title",
+      "description",
+    ],
+  };
+
+  const fuse = new Fuse(filter, fuseOptions);
+
   /**
    * @description Sets the local state to the list of shows retrieved form the api in the homepage component
    */
@@ -73,12 +85,11 @@ const Search = (props: SearchProps) => {
       }, 2000);
       return;
     }else{
-      startTransition(()=>{
-      const result = filter.filter((item) => {
-      return item.title.toLowerCase().includes(data.searchOutput);
-    });
-    setSearchResult(result);
-    setDefaultResult(result);
+    startTransition(()=>{
+    const result = fuse.search(data.searchOutput);
+    const mappedResult = result.map((item) => item.item);
+    setSearchResult(mappedResult);
+    setDefaultResult(mappedResult);
     setSubmitted(true);
     e.currentTarget.reset()}
     )
