@@ -119,7 +119,7 @@ const Landing = (props: LandingProps) => {
             <div className="form-group">
               <label htmlFor="email">Email</label>
               <input
-                type="text"
+                type="email"
                 id="email"
                 name="email"
                 placeholder="example@provider.com"
@@ -135,7 +135,7 @@ const Landing = (props: LandingProps) => {
               />
               <label htmlFor="password">Password</label>
               <input
-                type="text"
+                type="password"
                 id="password"
                 name="password"
                 placeholder="password"
@@ -143,7 +143,7 @@ const Landing = (props: LandingProps) => {
               />
               <label htmlFor="confirmation">Confirm password</label>
               <input
-                type="text"
+                type="password"
                 id="confirmation"
                 name="confirmation"
                 placeholder="password"
@@ -168,7 +168,7 @@ const Landing = (props: LandingProps) => {
             <div className="form-group">
               <label htmlFor="email">Email</label>
               <input
-                type="text"
+                type="email"
                 id="email"
                 name="email"
                 placeholder="example@provider.com"
